@@ -7,8 +7,15 @@ import string
 
 class Song:
     def __init__(self, title, artist, album, genre):
-        #Initialisiert ein Song-Objekt mit Titel, Künstler, Album und Genre
-        self.title = title
+        """
+        Initialisiert ein Song-Objekt.
+
+        Args:
+            title (str): Der Titel des Songs.
+            artist (str): Der Künstler des Songs.
+            album (str): Das Album, zu dem der Song gehört.
+            genre (str): Das Genre des Songs.
+        """
         self.artist = artist
         self.album = album
         self.genre = genre
@@ -26,7 +33,12 @@ class Song:
         #Vergleichsoperator für Gleichheit, basierend auf dem Titel
         return self.title == other.title
     def to_dict(self):
-        #Konvertiert das Song-Objekt in ein Wörterbuch
+        """
+        Konvertiert das Song-Objekt in ein Wörterbuch.
+
+        Returns:
+            dict: Ein Wörterbuch, das die Song-Attribute enthält.
+        """
         return {
             "title": self.title,
             "artist": self.artist,
@@ -36,21 +48,50 @@ class Song:
 
     @staticmethod
     def from_dict(data):
-        #Erstellt ein Song-Objekt aus einem Wörterbuch
+        """
+        Erstellt ein Song-Objekt aus einem Wörterbuch.
+
+        Args:
+            data (dict): Ein Wörterbuch mit Song-Attributen.
+
+        Returns:
+            Song: Ein Song-Objekt.
+        """
         return Song(data['title'], data['artist'], data['album'], data['genre'])
 
 class Playlist:
     def __init__(self, name):
-        #Initialisiert eine Playlist mit einem Namen und einer leeren Songliste
+        """
+        Initialisiert eine Playlist mit einem Namen und einer leeren Songliste.
+
+        Args:
+            name (str): Der Name der Playlist.
+        """
         self.name = name
         self.songs = []
 
     def add_song(self, song):
-        #Fügt einen Song zur Playlist hinzu
+        """
+        Fügt einen Song zur Playlist hinzu.
+
+        Args:
+            song (Song): Das hinzuzufügende Song-Objekt.
+            
+        Returns:
+            None
+        """
         self.songs.append(song)
     
     def remove_song(self, title):
-        #Entfernt einen Song aus der Playlist basierend auf dem Titel
+        """
+        Entfernt einen Song aus der Playlist basierend auf dem Titel.
+
+        Args:
+            title (str): Der Titel des Songs, der entfernt werden soll.
+
+        Returns:
+            None
+        """
         self.songs = [song for song in self.songs if song.title != title]
 
     def __str__(self):
@@ -89,7 +130,15 @@ class RedBlackTree:
         self.root = self.NIL
 
     def insert(self, song):
-        #Fügt einen neuen Song in den Rot-Schwarz-Baum ein
+        """
+        Fügt einen neuen Song in den Rot-Schwarz-Baum ein.
+
+        Args:
+            song (Song): Das Song-Objekt, das in den Baum eingefügt werden soll.
+
+        Returns:
+            None
+        """
         new_node = RedBlackNode(song)
         new_node.left = self.NIL
         new_node.right = self.NIL
@@ -117,7 +166,15 @@ class RedBlackTree:
         self.fix_insert(new_node)
 
     def fix_insert(self, node):
-        #Fixiert den Baum nach dem Einfügen, um die Rot-Schwarz-Eigenschaften zu bewahren
+        """
+        Fixiert den Baum nach dem Einfügen, um die Rot-Schwarz-Eigenschaften zu bewahren.
+
+        Args:
+            node (RedBlackNode): Der neu eingefügte Knoten, der fixiert werden muss.
+
+        Returns:
+            None
+        """
         while node != self.root and node.parent.color == "RED":
             if node.parent == node.parent.parent.left:
                 uncle = node.parent.parent.right
@@ -151,7 +208,15 @@ class RedBlackTree:
         self.root.color = "BLACK"
 
     def left_rotate(self, x):
-        #Führt eine Linksrotation durch
+        """
+        Führt eine Linksrotation durch.
+
+        Args:
+            x (RedBlackNode): Der Knoten, um den die Linksrotation durchgeführt wird.
+
+        Returns:
+            None
+        """
         y = x.right
         x.right = y.left
         if y.left != self.NIL:
@@ -167,7 +232,15 @@ class RedBlackTree:
         x.parent = y
 
     def right_rotate(self, x):
-        #Führt eine Rechtsrotation durch
+        """
+        Führt eine Rechtsrotation durch.
+
+        Args:
+            x (RedBlackNode): Der Knoten, um den die Rechtsrotation durchgeführt wird.
+
+        Returns:
+            None
+        """
         y = x.left
         x.left = y.right
         if y.right != self.NIL:
@@ -208,7 +281,16 @@ class RedBlackTree:
 
 
     def bfs_search(self, value, criteria):
-        #Breitensuche nach einem Song basierend auf einem Kriterium
+        """
+        Breitensuche nach einem Song basierend auf einem Kriterium.
+
+        Args:
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
         if self.root == self.NIL:
             return None
         queue = [self.root]
@@ -370,7 +452,12 @@ class MusicApp:
 
     
     def sort_songs(self): 
-        #Sortiert die Songs basierend auf einem Kriterium und einer Sortiermethode       
+        """
+        Sortiert die Songs basierend auf einem Kriterium und einer Sortiermethode.
+
+        Returns:
+            None
+        """
         print("Choose sorting order:")
         print("1. Ascending")
         print("2. Descending")
@@ -409,7 +496,16 @@ class MusicApp:
         self.save_data()  # Speichern der sortierten Liste in der Datei
 
     def bubble_sort(self, order, criteria):
-        #Implementiert den Bubble Sort Algorithmus
+        """
+        Implementiert den Bubble Sort Algorithmus.
+
+        Args:
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            None
+        """
         n = len(self.songs)
         for i in range(n):
             swapped = False
@@ -461,14 +557,36 @@ class MusicApp:
         return result
 
     def quick_sort(self, low, high, order, criteria):
-        #Implementiert den Quick Sort Algorithmus
+        """
+        Implementiert den Quick Sort Algorithmus.
+
+        Args:
+            low (int): Der Startindex.
+            high (int): Der Endindex.
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            None
+        """
         if low < high:
             pi = self.partition(low, high, order, criteria)
             self.quick_sort(low, pi - 1, order, criteria)
             self.quick_sort(pi + 1, high, order, criteria)
 
     def partition(self, low, high, order, criteria):
-        #Hilfsmethode für Quick Sort
+        """
+        Hilfsmethode für Quick Sort.
+
+        Args:
+            low (int): Der Startindex.
+            high (int): Der Endindex.
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            int: Der Index des Pivotelements.
+        """
         pivot = self.songs[high]
         i = low - 1
 
