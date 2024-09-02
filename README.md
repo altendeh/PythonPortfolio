@@ -1,92 +1,82 @@
-MusicApp
-MusicApp ist eine Python-Anwendung zur Verwaltung einer Musikbibliothek und von Playlists. Die Anwendung ermöglicht das Hinzufügen, Löschen, Suchen und Sortieren von Songs sowie das Erstellen und Verwalten von Playlists.
+Music Application
+Overview
+This music application allows users to manage a library of songs, create and manage playlists, and perform various operations such as adding, removing, searching, and sorting songs. The application uses a Red-Black Tree for efficient song management.
 
-Klassen
-Klasse Song
-Die Song Klasse repräsentiert ein Lied mit Attributen wie Titel, Künstler, Album und Genre.
+Classes and Methods
+1. Song Class
+Represents a song with attributes such as title, artist, album, and genre.
 
-Attribute:
-title: Der Titel des Songs.
-artist: Der Künstler des Songs.
-album: Das Album, in dem der Song enthalten ist.
-genre: Das Genre des Songs.
-Methoden:
-__init__(self, title, artist, album, genre): Initialisiert ein Song-Objekt mit den angegebenen Attributen.
-__str__(self): Gibt eine lesbare Darstellung des Songs zurück.
-__lt__(self, other): Vergleichsoperator für weniger als, basierend auf dem Titel.
-__eq__(self, other): Vergleichsoperator für Gleichheit, basierend auf dem Titel.
-to_dict(self): Konvertiert das Song-Objekt in ein Wörterbuch.
-from_dict(data): Erstellt ein Song-Objekt aus einem Wörterbuch.
-Klasse Playlist
-Die Playlist Klasse repräsentiert eine Playlist, die eine Sammlung von Songs enthält.
+Methods:
+__init__(self, title, artist, album, genre): Initializes a song object.
+__str__(self): Returns a readable representation of the song.
+__lt__(self, other): Less than comparison based on the title.
+__eq__(self, other): Equality comparison based on the title.
+to_dict(self): Converts the song object to a dictionary.
+from_dict(data): Creates a song object from a dictionary.
+2. Playlist Class
+Represents a playlist containing a list of songs.
 
-Attribute:
-name: Der Name der Playlist.
-songs: Eine Liste von Songs in der Playlist.
-Methoden:
-__init__(self, name): Initialisiert eine Playlist mit einem Namen und einer leeren Songliste.
-add_song(self, song): Fügt einen Song zur Playlist hinzu.
-remove_song(self, title): Entfernt einen Song aus der Playlist basierend auf dem Titel.
-__str__(self): Gibt eine lesbare Darstellung der Playlist zurück.
-to_dict(self): Konvertiert die Playlist in ein Wörterbuch.
-from_dict(data): Erstellt eine Playlist aus einem Wörterbuch.
-Klasse RedBlackNode
-Die RedBlackNode Klasse repräsentiert einen Knoten in einem Rot-Schwarz-Baum.
+Methods:
+__init__(self, name): Initializes a playlist with a name and an empty song list.
+add_song(self, song): Adds a song to the playlist.
+remove_song(self, title): Removes a song from the playlist based on the title.
+__str__(self): Returns a readable representation of the playlist.
+to_dict(self): Converts the playlist to a dictionary.
+from_dict(data): Creates a playlist from a dictionary.
+3. RedBlackNode Class
+Represents a node in the Red-Black Tree.
 
-Attribute:
-song: Der Song, der im Knoten gespeichert ist.
-color: Die Farbe des Knotens (rot oder schwarz).
-left: Der linke Kindknoten.
-right: Der rechte Kindknoten.
-parent: Der Elternknoten.
-Methoden:
-__init__(self, song): Initialisiert einen Knoten für den Rot-Schwarz-Baum.
-Klasse RedBlackTree
-Die RedBlackTree Klasse repräsentiert einen Rot-Schwarz-Baum, der Songs speichert und sortiert.
+Methods:
+__init__(self, song): Initializes a node with a song and sets the default color to red.
+4. RedBlackTree Class
+Represents a Red-Black Tree for efficient song management.
 
-Attribute:
-NIL: Ein spezieller Knoten, der als Platzhalter für leere Knoten dient.
-root: Der Wurzelknoten des Baums.
-Methoden:
-__init__(self): Initialisiert einen Rot-Schwarz-Baum mit einem NIL-Knoten.
-insert(self, song): Fügt einen neuen Song in den Rot-Schwarz-Baum ein.
-fix_insert(self, node): Fixiert den Baum nach dem Einfügen, um die Rot-Schwarz-Eigenschaften zu bewahren.
-left_rotate(self, x): Führt eine Linksrotation durch.
-right_rotate(self, x): Führt eine Rechtsrotation durch.
-search_iterative(self, value, criteria): Iterative Suche nach einem Song basierend auf einem Kriterium.
-_search_recursive(self, node, value, criteria): Rekursive Suche nach einem Song basierend auf einem Kriterium.
-bfs_search(self, value, criteria): Breitensuche nach einem Song basierend auf einem Kriterium.
-dfs_search(self, node, value, criteria): Tiefensuche nach einem Song basierend auf einem Kriterium.
-delete(self, song): Löscht einen Song aus dem Rot-Schwarz-Baum.
-_delete_recursive(self, node, song): Rekursive Methode zum Löschen eines Songs.
-_min_value_node(self, node): Findet den Knoten mit dem minimalen Wert.
-Klasse MusicApp
-Die MusicApp Klasse repräsentiert die Hauptanwendung, die die Musikbibliothek und Playlists verwaltet.
+Methods:
+__init__(self): Initializes the Red-Black Tree with a NIL node.
+insert(self, song): Inserts a new song into the tree.
+fix_insert(self, node): Fixes the tree after insertion to maintain Red-Black properties.
+left_rotate(self, x): Performs a left rotation.
+right_rotate(self, x): Performs a right rotation.
+search_iterative(self, value, criteria): Iterative search for a song based on a criterion.
+_search_recursive(self, node, value, criteria): Recursive search for a song based on a criterion.
+bfs_search(self, value, criteria): Breadth-First Search for a song based on a criterion.
+dfs_search(self, node, value, criteria): Depth-First Search for a song based on a criterion.
+delete(self, song): Deletes a song from the tree.
+_delete_recursive(self, node, song): Recursive method to delete a song.
+_min_value_node(self, node): Finds the node with the minimum value.
+5. MusicApp Class
+Main class for the music application.
 
-Attribute:
-FILENAME: Der Dateiname, unter dem die Songs gespeichert werden.
-songs: Eine Liste von Songs in der Bibliothek.
-rbt: Ein Rot-Schwarz-Baum, der die Songs speichert und sortiert.
-playlists: Eine Liste von Playlists.
-Methoden:
-__init__(self): Initialisiert die Musik-App und lädt Songs.
-load_songs(self): Lädt Songs aus einer Datei beim Start der App.
-save_data(self): Speichert alle Songs in einer Datei.
-add_song(self, title, artist, album, genre): Fügt einen neuen Song zur Bibliothek hinzu und speichert die Daten.
-delete_song(self, title): Löscht einen Song aus der Bibliothek und speichert die Daten.
-display_all_songs(self): Zeigt alle Songs in der Bibliothek an.
-search_song(self): Sucht nach einem Song basierend auf einem Kriterium und einer Suchmethode.
-sort_songs(self): Sortiert die Songs basierend auf einem Kriterium und einer Sortiermethode.
-bubble_sort(self, order, criteria): Implementiert den Bubble Sort Algorithmus.
-insertion_sort(self, order, criteria): Implementiert den Insertion Sort Algorithmus.
-merge_sort(self, array, order, criteria): Implementiert den Merge Sort Algorithmus.
-merge(self, left, right, order, criteria): Hilfsmethode für Merge Sort.
-quick_sort(self, low, high, order, criteria): Implementiert den Quick Sort Algorithmus.
-partition(self, low, high, order, criteria): Hilfsmethode für Quick Sort.
-compare(self, song1, song2, order, criteria): Vergleicht zwei Songs basierend auf dem Kriterium und der Reihenfolge.
-create_playlist(self): Erstellt eine neue Playlist.
-add_song_to_playlist(self): Fügt einen Song zu einer Playlist hinzu.
-remove_song_from_playlist(self): Entfernt einen Song aus einer Playlist.
-display_playlists(self): Zeigt alle Playlists an.
-create_random_songs(self, count): Erstellt eine bestimmte Anzahl zufälliger Songs.
-main_menu(self): Hauptmenü der Musik-App.
+Methods:
+__init__(self): Initializes the music app and loads songs.
+load_songs(self): Loads songs from a file.
+save_data(self): Saves all songs to a file.
+add_song(self, title, artist, album, genre): Adds a new song to the library and saves the data.
+delete_song(self, title): Deletes a song from the library and saves the data.
+display_all_songs(self): Displays all songs in the library.
+search_song(self): Searches for a song based on a criterion and search method.
+sort_songs(self): Sorts the songs based on a criterion and sorting method.
+bubble_sort(self, order, criteria): Implements the Bubble Sort algorithm.
+insertion_sort(self, order, criteria): Implements the Insertion Sort algorithm.
+merge_sort(self, array, order, criteria): Implements the Merge Sort algorithm.
+merge(self, left, right, order, criteria): Helper method for Merge Sort.
+quick_sort(self, low, high, order, criteria): Implements the Quick Sort algorithm.
+partition(self, low, high, order, criteria): Helper method for Quick Sort.
+compare(self, song1, song2, order, criteria): Compares two songs based on the criterion and order.
+create_playlist(self): Creates a new playlist.
+add_song_to_playlist(self): Adds a song to a playlist.
+remove_song_from_playlist(self): Removes a song from a playlist.
+display_playlists(self): Displays all playlists.
+create_random_songs(self, count): Creates a specified number of random songs.
+main_menu(self): Main menu of the music app.
+Usage
+To use the music application, run the script. The main menu provides options to add new songs, create playlists, add songs to playlists, remove songs from playlists, search songs, sort songs, display all songs, display playlists, delete songs from the library, and create random songs.
+
+Example
+Python
+
+if __name__ == "__main__":
+    app = MusicApp()
+    app.main_menu()
+AI-generated code. Review and use carefully. More info on FAQ.
+This will start the music application and display the main menu for user interaction.
