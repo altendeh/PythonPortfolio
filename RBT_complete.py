@@ -4,7 +4,6 @@ import time
 import random
 import string
 
-
 class Song:
     def __init__(self, title, artist, album, genre):
         """
@@ -16,14 +15,14 @@ class Song:
             album (str): Das Album, zu dem der Song gehört.
             genre (str): Das Genre des Songs.
         """
+        self.title = title
         self.artist = artist
         self.album = album
         self.genre = genre
-        
 
     def __str__(self):
         #Gibt eine lesbare Darstellung des Songs zurück
-        return f"{self.title} by {self.artist} - Album: {self.album}, Genre: {self.genre}, "
+        return f"{self.title} von {self.artist} - Album: {self.album}, Genre: {self.genre}"
 
     def __lt__(self, other):
         #Vergleichsoperator für weniger als, basierend auf dem Titel
@@ -32,6 +31,7 @@ class Song:
     def __eq__(self, other):
         #Vergleichsoperator für Gleichheit, basierend auf dem Titel
         return self.title == other.title
+
     def to_dict(self):
         """
         Konvertiert das Song-Objekt in ein Wörterbuch.
@@ -107,15 +107,14 @@ class Playlist:
 
     @staticmethod
     def from_dict(data):
-        #Erstellt eine Playlist aus einem Wörterbuch
+        # Erstellt eine Playlist aus einem Wörterbuch
         playlist = Playlist(data['name'])
         playlist.songs = [Song.from_dict(song_data) for song_data in data['songs']]
         return playlist
 
-
 class RedBlackNode:
     def __init__(self, song):
-        #Initialisiert einen Knoten für den Rot-Scwarz-Baum
+        #Initialisiert einen Knoten für den Rot-Schwarz-Baum
         self.song = song
         self.color = "RED"  #Alle neu eingefügten Knoten sind standardmäßig rot
         self.left = None
@@ -267,7 +266,6 @@ class RedBlackTree:
                 current = current.right
         return None
 
-
     def _search_recursive(self, node, value, criteria):
         #Rekursive Suche nach einem Song basierend auf einem Kriterium
         if node == self.NIL:
@@ -278,7 +276,6 @@ class RedBlackTree:
             return self._search_recursive(node.left, value, criteria)
         else:
             return self._search_recursive(node.right, value, criteria)
-
 
     def bfs_search(self, value, criteria):
         """
@@ -304,7 +301,6 @@ class RedBlackTree:
                 queue.append(node.right)
         return None
 
-
     def dfs_search(self, node, value, criteria):
         #Tiefensuche nach einem Song basierend auf einem Kriterium
         if node == self.NIL:
@@ -315,7 +311,6 @@ class RedBlackTree:
         if left_search is not None:
             return left_search
         return self.dfs_search(node.right, value, criteria)
-
 
     def delete(self, song):
         #Löscht einen Song aus dem Rot-Schwarz-Baum
@@ -355,12 +350,12 @@ class MusicApp:
     def __init__(self):
         #Initialisiert die Musik-App und lädt Songs
         self.songs = []
+        self.playlists = []
         self.rbt = RedBlackTree()
         self.load_songs()
 
     def load_songs(self):
         #Lädt Songs aus einer Datei beim Start der App
-        """Load songs from a file when the app starts."""
         if os.path.exists(self.FILENAME):
             with open(self.FILENAME, 'r') as file:
                 for line in file:
@@ -368,25 +363,24 @@ class MusicApp:
                     song = Song(title, artist, album, genre)
                     self.songs.append(song)
                     self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
-            print(f"{len(self.songs)} songs loaded from {self.FILENAME}.")
+            print(f"{len(self.songs)} Songs aus {self.FILENAME} geladen.")
         else:
-            print("No songs found. Starting with an empty music library.")
+            print("Keine Songs gefunden. Starte mit einer leeren Musikbibliothek.")
 
     def save_data(self):
         #Speichert alle Songs in einer Datei
-        """Save all songs to a file."""
         with open(self.FILENAME, 'w') as file:
             for song in self.songs:
                 file.write(f"{song.title},{song.artist},{song.album},{song.genre}\n")
-        print(f"{len(self.songs)} songs saved to {self.FILENAME}.")
-    
+        print(f"{len(self.songs)} Songs in {self.FILENAME} gespeichert.")
+
     def add_song(self, title, artist, album, genre):
         #Fügt einen neuen Song zur Bibliothek hinzu und speichert die Daten
         song = Song(title, artist, album, genre)
         self.songs.append(song)
         self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
         self.save_data()  #Speichert die Daten nach dem Hinzufügen eines Songs
-        print(f"'{song}' added to your music library.")
+        print(f"'{song}' zur Musikbibliothek hinzugefügt.")
 
     def delete_song(self, title):
         #Löscht einen Song aus der Bibliothek und speichert die Daten
@@ -397,36 +391,36 @@ class MusicApp:
             for playlist in self.playlists:
                 playlist.remove_song(title)  #Entfernt den Song aus allen Playlists
             self.save_data()  #Speichert die Daten nach dem Löschen eines Songs
-            print(f"'{song_to_delete}' removed from your music library.")
+            print(f"'{song_to_delete}' aus der Musikbibliothek entfernt.")
         else:
-            print(f"'{title}' not found in your music library.")
+            print(f"'{title}' nicht in der Musikbibliothek gefunden.")
 
     def display_all_songs(self):
         #Zeigt alle Songs in der Bibliothek an
         if not self.songs:
-            print("No songs available.")
+            print("Keine Songs verfügbar.")
         else:
             for song in self.songs:
                 print(song)
 
     def search_song(self):
         #Sucht nach einem Song basierend auf einem Kriterium und einer Suchmethode
-        print("Search for a song:")
-        criteria = input("Search by (T)itle, (A)rtist, or (G)enre: ").strip().lower()
+        print("Suche nach einem Song:")
+        criteria = input("Suche nach (T)itel, (K)ünstler oder (G)enre: ").strip().lower()
         if criteria == 't':
             criteria = 'title'
-        elif criteria == 'a':
+        elif criteria == 'k':
             criteria = 'artist'
         elif criteria == 'g':
             criteria = 'genre'
         else:
-            print("Invalid criteria selected.")
+            print("Ungültiges Suchkriterium ausgewählt.")
             return
-    
-        value = input(f"Enter {criteria}: ").strip()
-        search_method = input("Choose search method - (R)ecursive, (I)terative, (B)readth-First Search, or (D)epth-First Search: ").strip().lower()
 
-        start_time = time.time()  # Beginn der Zeitmessung
+        value = input(f"Gib {criteria} ein: ").strip()
+        search_method = input("Wähle Suchmethode - (R)ekursiv, (I)terativ, (B)reitensuche oder (T)iefensuche: ").strip().lower()
+
+        start_time = time.time()  #Beginn der Zeitmessung
 
         if search_method == 'r':
             result = self.rbt._search_recursive(self.rbt.root, value, criteria)
@@ -434,52 +428,51 @@ class MusicApp:
             result = self.rbt.search_iterative(value, criteria)
         elif search_method == 'b':
             result = self.rbt.bfs_search(value, criteria)
-        elif search_method == 'd':
+        elif search_method == 't':
             result = self.rbt.dfs_search(self.rbt.root, value, criteria)
         else:
-            print("Invalid search method selected.")
+            print("Ungültige Suchmethode ausgewählt.")
             return
 
-        end_time = time.time()  # Ende der Zeitmessung
+        end_time = time.time()  #Ende der Zeitmessung
         elapsed_time = end_time - start_time
 
         if result:
-            print(f"'{result}' found in your music library.")
+            print(f"'{result}' in der Musikbibliothek gefunden.")
         else:
-            print(f"'{value}' not found in your music library.")
+            print(f"'{value}' nicht in der Musikbibliothek gefunden.")
 
-        print(f"Time taken: {elapsed_time:.6f} seconds.")
+        print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
 
-    
-    def sort_songs(self): 
+    def sort_songs(self):
         """
         Sortiert die Songs basierend auf einem Kriterium und einer Sortiermethode.
 
         Returns:
             None
         """
-        print("Choose sorting order:")
-        print("1. Ascending")
-        print("2. Descending")
+        print("Wähle Sortierreihenfolge:")
+        print("1. Aufsteigend")
+        print("2. Absteigend")
 
-        order = input("Enter your choice: ").strip()
+        order = input("Gib deine Wahl ein: ").strip()
 
-        print("Choose sorting criteria:")
-        print("1. Song Title")
-        print("2. Artist")
+        print("Wähle Sortierkriterium:")
+        print("1. Titel")
+        print("2. Künstler")
         print("3. Genre")
 
-        criteria = input("Enter your choice: ").strip()
+        criteria = input("Gib deine Wahl ein: ").strip()
         
-        print("Choose sorting algorithm:")
+        print("Wähle Sortieralgorithmus:")
         print("1. Bubble Sort")
         print("2. Insertion Sort")
         print("3. Merge Sort")
         print("4. Quick Sort")
 
-        choice = input("Enter your choice: ").strip()
+        choice = input("Gib deine Wahl ein: ").strip()
 
-        # Messen der Zeit, die zum Sortieren benötigt wird
+        #Messen der Zeit, die zum Sortieren benötigt wird
         start_time = time.time()
         if choice == '1':
             self.bubble_sort(order, criteria)
@@ -490,10 +483,10 @@ class MusicApp:
         elif choice == '4':
             self.quick_sort(0, len(self.songs) - 1, order, criteria)
         else:
-            print("Invalid choice.")
+            print("Ungültige Wahl.")
         
-        print(f"Time taken: {time.time() - start_time:.6f} seconds.")
-        self.save_data()  # Speichern der sortierten Liste in der Datei
+        print(f"Benötigte Zeit: {time.time() - start_time:.6f} Sekunden.")
+        self.save_data()  #Speichern der sortierten Liste in der Datei
 
     def bubble_sort(self, order, criteria):
         """
@@ -515,7 +508,7 @@ class MusicApp:
                     swapped = True
             if not swapped:
                 break
-        print("Sorted using Bubble Sort.")
+        print("Sortiert mit Bubble Sort.")
 
     def insertion_sort(self, order, criteria):
         #Implementiert den Insertion Sort Algorithmus
@@ -526,7 +519,7 @@ class MusicApp:
                 self.songs[j + 1] = self.songs[j]
                 j -= 1
             self.songs[j + 1] = key_song
-        print("Sorted using Insertion Sort.")
+        print("Sortiert mit Insertion Sort.")
 
     def merge_sort(self, array, order, criteria):
         #Implementiert den Merge Sort Algorithmus
@@ -600,68 +593,67 @@ class MusicApp:
 
     def compare(self, song1, song2, order, criteria):
         #Vergleicht zwei Songs basierend auf dem Kriterium und der Reihenfolge
-        if criteria == '1':  # Song Title
-            if order == '1':  # Ascending
+        if criteria == '1':  #Titel
+            if order == '1':  #Aufsteigend
                 return song1.title > song2.title
-            else:  # Descending
+            else:  #Absteigend
                 return song1.title < song2.title
-        elif criteria == '2':  # Artist
-            if order == '1':  # Ascending
+        elif criteria == '2':  #Künstler
+            if order == '1':  #Aufsteigend
                 return song1.artist > song2.artist
-            else:  # Descending
+            else:  #Absteigend
                 return song1.artist < song2.artist
-        elif criteria == '3':  # Genre
-            if order == '1':  # Ascending
+        elif criteria == '3':  #Genre
+            if order == '1':  #Aufsteigend
                 return song1.genre > song2.genre
-            else:  # Descending
+            else:  #Absteigend
                 return song1.genre < song2.genre
-    
 
     def create_playlist(self):
         #Erstellt eine neue Playlist
-        name = input("Enter playlist name: ").strip()
+        name = input("Gib den Namen der Playlist ein: ").strip()
         if any(pl.name == name for pl in self.playlists):
-            print(f"A playlist with the name '{name}' already exists. Please choose a different name.")
+            print(f"Eine Playlist mit dem Namen '{name}' existiert bereits. Bitte wähle einen anderen Namen.")
             return
         playlist = Playlist(name)
         self.playlists.append(playlist)
         self.save_data()
-        print(f"Created playlist: {playlist}")
-
+        print(f"Playlist erstellt: {playlist}")
 
     def add_song_to_playlist(self):
         #Fügt einen Song einer Playlist hinzu
-        playlist_name = input("Enter the name of the playlist: ")
+        playlist_name = input("Gib den Namen der Playlist ein: ")
         playlist = next((pl for pl in self.playlists if pl.name == playlist_name), None)
         if not playlist:
-            print("Playlist not found.")
+            print("Playlist nicht gefunden.")
             return
-        
-        song_title = input("Enter the name of the song to add: ")
+
+        song_title = input("Gib den Namen des Songs ein, der hinzugefügt werden soll: ")
         song = next((s for s in self.songs if s.title == song_title), None)
         if not song:
-            print("Song not found.")
+            print("Song nicht gefunden.")
             return
 
         playlist.add_song(song)
         self.save_data()
-        print(f"Added {song.title} to playlist {playlist.name}")
+        print(f"{song.title} zur Playlist {playlist.name} hinzugefügt.")
 
     def remove_song_from_playlist(self):
         #Entfernt einen Song aus einer Playlist
-        playlist_name = input("Enter the name of the playlist: ")
+        playlist_name = input("Gib den Namen der Playlist ein: ")
         playlist = next((pl for pl in self.playlists if pl.name == playlist_name), None)
         if not playlist:
-            print("Playlist not found.")
+            print("Playlist nicht gefunden.")
             return
-        
-        song_title = input("Enter the name of the song to remove: ")
+
+        song_title = input("Gib den Namen des Songs ein, der entfernt werden soll: ")
         playlist.remove_song(song_title)
         self.save_data()
-        
+
     def display_playlists(self):
+        #Zeigt alle Playlists an
         if not self.playlists:
-            print("No playlists available.")
+            print("Keine Playlists verfügbar.")
         else:
             for playlist in self.playlists:
                 print(playlist)
@@ -670,40 +662,36 @@ class MusicApp:
 
     def create_random_songs(self, count):
         #Erstellt eine bestimmte Anzahl zufälliger Songs
-        import random
-        import string
-
         for _ in range(count):
             title = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             artist = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             album = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             genre = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             self.add_song(title, artist, album, genre)
- 
 
     def main_menu(self):
         #Hauptmenü der Musik-App
         while True:
-            print("\n--- Music App ---")
-            print("1. Add New Song")
-            print("2. Create Playlist")
-            print("3. Add Song to Playlist")
-            print("4. Remove Song from Playlist")
-            print("5. Search Songs")
-            print("6. Sort Songs")
-            print("7. Display All Songs")
-            print("8. Display Playlists")
-            print("9. Delete Song from Library")  
-            print("10. Exit")
-            print("11. Create Random Songs")
+            print("\n--- Musik-App ---")
+            print("1. Neuen Song hinzufügen")
+            print("2. Playlist erstellen")
+            print("3. Song zur Playlist hinzufügen")
+            print("4. Song aus Playlist entfernen")
+            print("5. Songs suchen")
+            print("6. Songs sortieren")
+            print("7. Alle Songs anzeigen")
+            print("8. Playlists anzeigen")
+            print("9. Song aus Bibliothek löschen")
+            print("10. Beenden")
+            print("11. Zufällige Songs erstellen")
 
-            choice = input("Enter your choice: ").strip()
+            choice = input("Gib deine Wahl ein: ").strip()
 
             if choice == '1':
-                title = input("Enter song title: ").strip()
-                artist = input("Enter artist name: ").strip()
-                album = input("Enter album name: ").strip()
-                genre = input("Enter genre: ").strip()
+                title = input("Gib den Titel des Songs ein: ").strip()
+                artist = input("Gib den Namen des Künstlers ein: ").strip()
+                album = input("Gib den Namen des Albums ein: ").strip()
+                genre = input("Gib das Genre ein: ").strip()
                 self.add_song(title, artist, album, genre)
             elif choice == '2':
                 self.create_playlist()
@@ -719,17 +707,17 @@ class MusicApp:
                 self.display_all_songs()
             elif choice == '8':
                 self.display_playlists()
-            elif choice == '9':  
-                title = input("Enter the title of the song to delete: ").strip()
+            elif choice == '9':
+                title = input("Gib den Titel des Songs ein, der gelöscht werden soll: ").strip()
                 self.delete_song(title)
             elif choice == '10':
-                print("Exiting Music App. Goodbye!")
+                print("Musik-App wird beendet. Auf Wiedersehen!")
                 break
             elif choice == '11':
-                count = int(input("Enter number of random songs to create: "))
+                count = int(input("Gib die Anzahl der zu erstellenden zufälligen Songs ein: "))
                 self.create_random_songs(count)
             else:
-                print("Invalid choice. Please select again.")
+                print("Ungültige Wahl. Bitte erneut auswählen.")
 
 if __name__ == "__main__":
     #Startet die Musik-App, wenn das Skript direkt ausgeführt wird
