@@ -670,8 +670,7 @@ class MusicApp:
                     print(f"  - {song}")
 
     def create_random_songs(self, count):
-    #Erstellt eine bestimmte Anzahl zufälliger Songs und speichert sie auf einmal
-        #new_songs = []
+        #Erstellt eine bestimmte Anzahl zufälliger Songs und speichert sie auf einmal
         for _ in range(count):
             title = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             artist = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
@@ -680,7 +679,6 @@ class MusicApp:
             song = Song(title, artist, album, genre)
             self.songs.append(song)
             self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
-            #new_songs.append(song)
 
         self.save_data()
         print(f"{count} zufällige Songs erstellt und gespeichert.")
