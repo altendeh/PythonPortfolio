@@ -456,6 +456,9 @@ class MusicApp:
         print("2. Absteigend")
 
         order = input("Gib deine Wahl ein: ").strip()
+        if order not in ['1', '2']:
+            print("Ungültige Sortierreihenfolge. Bitte wähle '1' für aufsteigend oder '2' für absteigend.")
+            return
 
         print("Wähle Sortierkriterium:")
         print("1. Titel")
@@ -463,6 +466,11 @@ class MusicApp:
         print("3. Genre")
 
         criteria = input("Gib deine Wahl ein: ").strip()
+        
+        criteria = input("Gib deine Wahl ein: ").strip()
+        if criteria not in ['1', '2', '3']:
+            print("Ungültiges Sortierkriterium. Bitte wähle '1' für Titel, '2' für Künstler oder '3' für Genre.")
+            return
         
         print("Wähle Sortieralgorithmus:")
         print("1. Bubble Sort")
@@ -484,6 +492,7 @@ class MusicApp:
             self.quick_sort(0, len(self.songs) - 1, order, criteria)
         else:
             print("Ungültige Wahl.")
+            return
         
         print(f"Benötigte Zeit: {time.time() - start_time:.6f} Sekunden.")
         self.save_data()  #Speichern der sortierten Liste in der Datei
@@ -661,13 +670,29 @@ class MusicApp:
                     print(f"  - {song}")
 
     def create_random_songs(self, count):
-        #Erstellt eine bestimmte Anzahl zufälliger Songs
+    #Erstellt eine bestimmte Anzahl zufälliger Songs und speichert sie auf einmal
+        new_songs = []
         for _ in range(count):
             title = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             artist = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             album = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             genre = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
-            self.add_song(title, artist, album, genre)
+            song = Song(title, artist, album, genre)
+            self.songs.append(song)
+            self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
+            new_songs.append(song)
+
+        self.save_new_songs(new_songs)
+        print(f"{count} zufällige Songs erstellt und gespeichert.")
+
+    def save_new_songs(self, new_songs):
+        #Speichert alle neuen Songs auf einmal in der Datei
+        #Wird genutzt, um bei Nutzung der Funkion create_random_songs alle Songs auf einmal am Ende gespeichert werden
+        with open(self.FILENAME, 'a') as file:
+            for song in new_songs:
+                file.write(f"{song.title},{song.artist},{song.album},{song.genre}\n")
+        print(f"{len(new_songs)} neue Songs in {self.FILENAME} gespeichert.")
+
 
     def main_menu(self):
         #Hauptmenü der Musik-App

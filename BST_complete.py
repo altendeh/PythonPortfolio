@@ -1,6 +1,8 @@
 import os
 import json
 import time
+import random
+import string
 
 class Song:
     def __init__(self, title, artist, album, genre):
@@ -359,7 +361,11 @@ class MusicApp:
         print("2. Absteigend")
 
         order_choice = input("Gib deine Wahl ein: ").strip()
+        if order_choice not in ['1', '2']:
+            print("Ungültige Sortierreihenfolge. Bitte wähle '1' für aufsteigend oder '2' für absteigend.")
+            return
         ascending = order_choice == '1'
+        
 
         print("Wähle Sortierkriterium:")
         print("1. Titel")
@@ -367,6 +373,9 @@ class MusicApp:
         print("3. Genre")
 
         criteria_choice = input("Gib deine Wahl ein: ").strip()
+        if criteria_choice not in ['1', '2', '3']:
+            print("Ungültiges Sortierkriterium. Bitte wähle '1' für Titel, '2' für Künstler oder '3' für Genre.")
+            return
         
         print("Wähle Sortieralgorithmus:")
         print("1. Bubble Sort")
@@ -388,6 +397,7 @@ class MusicApp:
             self.quick_sort(0, len(self.songs) - 1, ascending, criteria_choice)
         else:
             print("Ungültige Wahl.")
+            return
         
         print(f"Benötigte Zeit: {time.time() - start_time:.6f} Sekunden.")
         self.save_data()  #Speichert die sortierte Liste in der Datei
@@ -557,15 +567,18 @@ class MusicApp:
 
     def create_random_songs(self, count):
         #Erstellt eine bestimmte Anzahl zufälliger Songs und fügt sie zur MusicApp hinzu
-        import random
-        import string
-
         for _ in range(count):
             title = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             artist = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             album = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
             genre = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
-            self.add_song(title, artist, album, genre)
+            song = Song(title, artist, album, genre)
+            self.songs.append(song)
+            self.bst.insert(song)  # In den binären Suchbaum einfügen
+
+        self.save_data()  # Daten nur einmal nach dem Hinzufügen aller Songs speichern
+        print(f"{count} zufällige Songs wurden zur Musikbibliothek hinzugefügt.")
+
 
     def main_menu(self):
         """
