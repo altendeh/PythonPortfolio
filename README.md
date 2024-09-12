@@ -3,6 +3,19 @@
 ## Übersicht
 Diese Musik-Anwendung ermöglicht es Benutzern, eine Bibliothek von Liedern zu verwalten, Playlists zu erstellen und zu verwalten sowie verschiedene Operationen wie Hinzufügen, Entfernen, Suchen und Sortieren von Liedern durchzuführen. Die Anwendung verwendet einen Rot-Schwarz-Baum bzw. einen Binären Suchbaum für eine effiziente Verwaltung der Lieder.
 
+## Anleitung
+Um die Musik-Anwendung zu verwenden, führen Sie das Skript aus. Das Hauptmenü bietet Optionen zum Hinzufügen neuer Lieder, Erstellen von Playlists, Hinzufügen von Liedern zu Playlists, Entfernen von Liedern aus Playlists, Suchen von Liedern, Sortieren von Liedern, Anzeigen aller Lieder, Anzeigen von Playlists, Löschen von Liedern aus der Bibliothek und Erstellen zufälliger Lieder.
+
+## Beispiel
+
+```python
+if __name__ == "__main__":
+    app = MusicApp()
+    app.main_menu()
+
+
+
+
 ## Vorgehen
 
 1. **Anforderungen analysiert**:
@@ -160,15 +173,4 @@ Hauptklasse für die Musik-Anwendung.
 ### Quick Sort
 - **Big O Notation**: $$O(n \log n)$$ im Durchschnitt, $$O(n^2)$$ im schlimmsten Fall
 - **Funktionsweise**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
-
-## Verwendung
-Um die Musik-Anwendung zu verwenden, führen Sie das Skript aus. Das Hauptmenü bietet Optionen zum Hinzufügen neuer Lieder, Erstellen von Playlists, Hinzufügen von Liedern zu Playlists, Entfernen von Liedern aus Playlists, Suchen von Liedern, Sortieren von Liedern, Anzeigen aller Lieder, Anzeigen von Playlists, Löschen von Liedern aus der Bibliothek und Erstellen zufälliger Lieder.
-
-## Beispiel
-
-```python
-if __name__ == "__main__":
-    app = MusicApp()
-    app.main_menu()
-
 
