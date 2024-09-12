@@ -12,6 +12,7 @@ Um die Musik-Anwendung zu verwenden, führen Sie das Skript aus. Das Hauptmenü 
 if __name__ == "__main__":
     app = MusicApp()
     app.main_menu()
+```
 
 
 
