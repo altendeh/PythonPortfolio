@@ -4,11 +4,7 @@
 Diese Musik-Anwendung ermöglicht es Benutzern, eine Bibliothek von Liedern zu verwalten, Playlists zu erstellen und zu verwalten sowie verschiedene Operationen wie Hinzufügen, Entfernen, Suchen und Sortieren von Liedern durchzuführen. Die Anwendung verwendet einen Rot-Schwarz-Baum bzw. einen Binären Suchbaum für eine effiziente Verwaltung der Lieder.
 
 ## Vorgehen
-1. **Anforderungsanalyse**: Bestimme die Anforderungen und Funktionen der Anwendung, wie das Hinzufügen, Entfernen, Suchen und Sortieren von Liedern sowie das Erstellen und Verwalten von Playlists.
-2. **Design**: Entwerfe die Architektur der Anwendung, einschließlich der Klassen und Methoden, die benötigt werden, um die Anforderungen zu erfüllen.
-3. **Implementierung**: Implementiere die Klassen und Methoden gemäß dem Design. Stelle sicher, dass die Anwendung die grundlegenden Funktionen wie das Hinzufügen und Entfernen von Liedern sowie das Erstellen und Verwalten von Playlists unterstützt.
-4. **Testen**: Teste die Anwendung gründlich, um sicherzustellen, dass alle Funktionen korrekt arbeiten und keine Fehler auftreten.
-5. **Dokumentation**: Erstelle eine umfassende Dokumentation, die die Verwendung der Anwendung sowie die Implementierungsdetails beschreibt.
+?????????
 
 ## Klassen und Methoden
 
