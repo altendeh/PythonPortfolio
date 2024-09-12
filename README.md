@@ -4,7 +4,32 @@
 Diese Musik-Anwendung ermöglicht es Benutzern, eine Bibliothek von Liedern zu verwalten, Playlists zu erstellen und zu verwalten sowie verschiedene Operationen wie Hinzufügen, Entfernen, Suchen und Sortieren von Liedern durchzuführen. Die Anwendung verwendet einen Rot-Schwarz-Baum bzw. einen Binären Suchbaum für eine effiziente Verwaltung der Lieder.
 
 ## Vorgehen
-?????????
+
+1. **Anforderungen analysiert**:
+   - Die grundlegenden Funktionen der Anwendung wurden definiert, einschließlich Hinzufügen, Entfernen, Suchen und Sortieren von Liedern.
+   - Die zu verwendenden Datenstrukturen wurden bestimmt, Rot-Schwarz-Baum und Binärer Suchbaum.
+
+2. **Design der Anwendung abgeschlossen**:
+   - Die Klassen und ihre Methoden wurden entworfen, um die Anforderungen zu erfüllen.
+   - Ein Klassendiagramm wurde erstellt, um die Beziehungen zwischen den Klassen zu visualisieren. (siehe Klassen und Methoden)
+
+3. **Implementierung durchgeführt**:
+   - Die `Song`-Klasse und ihre Methoden wurden implementiert.
+   - Die `Playlist`-Klasse und ihre Methoden wurden implementiert.
+   - Die `RedBlackTree`- und `BinarySearchTree`-Klassen sowie deren Knotenklassen (`RedBlackNode` und `TreeNode`) wurden implementiert.
+   - Die `MusicApp`-Klasse und ihre Methoden wurden implementiert.
+
+4. **Tests durchgeführt**:
+   - Unit-Tests für jede Klasse und Methode wurden geschrieben, um deren korrekte Funktion sicherzustellen.
+   - Die Anwendung wurde als Ganzes getestet, um sicherzustellen, dass alle Komponenten zusammenarbeiten.
+
+5. **Dokumentation erstellt**:
+   - Der Code wurde mit Kommentaren und Docstrings dokumentiert.
+   - Eine Benutzeranleitung wurde erstellt, die erklärt, wie die Anwendung verwendet wird.
+
+6. **Optimierung durchgeführt**:
+   - Die Leistung der Such- und Sortieralgorithmen wurde analysiert.
+   - Der Code wurde optimiert, um die Effizienz zu verbessern.
 
 ## Klassen und Methoden
 
