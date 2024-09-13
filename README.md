@@ -175,3 +175,78 @@ Hauptklasse für die Musik-Anwendung.
 - **Big O Notation**: $$O(n \log n)$$ im Durchschnitt, $$O(n^2)$$ im schlimmsten Fall
 - **Funktionsweise**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
 
+
+
+
+
+
+
+
+## Suchalgorithmen
+
+### Iterative Suche
+- **Beschreibung**: Durchläuft die Elemente einer Datenstruktur nacheinander in einer Schleife.
+- **Leistung**: Zeitkomplexität von $$O(n)$$.
+- **Speicherverbrauch**: $$O(1)$$, da keine zusätzlichen Datenstrukturen oder Rekursionsaufrufe verwendet werden.
+
+### Rekursive Suche
+- **Beschreibung**: Verwendet Rekursion, um die Elemente einer Datenstruktur zu durchsuchen.
+- **Leistung**: Zeitkomplexität von $$O(n)$$.
+- **Speicherverbrauch**: $$O(n)$$ im schlimmsten Fall, da jeder Rekursionsaufruf zusätzlichen Speicher auf dem Call-Stack benötigt.
+
+### Breitensuche (BFS)
+- **Beschreibung**: Durchsucht die Knoten eines Graphen schichtweise.
+- **Leistung**: Zeitkomplexität von $$O(V + E)$$, wobei V die Anzahl der Knoten und E die Anzahl der Kanten ist.
+- **Speicherverbrauch**: $$O(V)$$, da alle Knoten auf der aktuellen Ebene gespeichert werden müssen.
+
+### Tiefensuche (DFS)
+- **Beschreibung**: Durchsucht die Knoten eines Graphen, indem es so tief wie möglich in einen Zweig des Graphen geht.
+- **Leistung**: Zeitkomplexität von $$O(V + E)$$.
+- **Speicherverbrauch**: $$O(V)$$ im schlimmsten Fall, da der aktuelle Pfad auf dem Call-Stack gespeichert wird.
+
+## Sortieralgorithmen
+
+### Bubble Sort
+- **Beschreibung**: Vergleicht benachbarte Elemente und vertauscht sie, wenn sie in der falschen Reihenfolge sind.
+- **Leistung**: Zeitkomplexität von $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(1)$$, da in-place sortiert wird und keine zusätzlichen Datenstrukturen benötigt werden.
+
+### Insertion Sort
+- **Beschreibung**: Baut die sortierte Liste schrittweise auf, indem es jedes neue Element an die richtige Position in der bereits sortierten Liste einfügt.
+- **Leistung**: Zeitkomplexität von $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(1)$$, da in-place sortiert wird.
+
+### Merge Sort
+- **Beschreibung**: Teilt die Liste wiederholt in zwei Hälften, sortiert jede Hälfte rekursiv und fügt die sortierten Hälften dann zusammen.
+- **Leistung**: Zeitkomplexität von $$O(n \log n)$$.
+- **Speicherverbrauch**: $$O(n)$$, da zusätzlicher Speicherplatz für die temporären Arrays benötigt wird.
+
+### Quick Sort
+- **Beschreibung**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
+- **Leistung**: Durchschnittliche Zeitkomplexität von $$O(n \log n)$$, schlimmster Fall $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(\log n)$$ im Durchschnitt, da der Call-Stack für die Rekursion verwendet wird.
+
+## Vergleich der Algorithmen
+
+### Suchalgorithmen
+
+- **Iterative Suche vs. Rekursive Suche**:
+  - **Speicherverbrauch**: Iterative Suche verwendet weniger Speicher ($$O(1)$$) im Vergleich zur rekursiven Suche ($$O(n)$$).
+  - **Leistung**: Beide haben eine ähnliche Zeitkomplexität von $$O(n)$$, aber die iterative Suche kann in der Praxis schneller sein.
+
+- **Breitensuche (BFS) vs. Tiefensuche (DFS)**:
+  - **Speicherverbrauch**: BFS kann mehr Speicher ($$O(V)$$) benötigen, da es alle Knoten auf der aktuellen Ebene speichert, während DFS nur den aktuellen Pfad speichert ($$O(V)$$ im schlimmsten Fall).
+  - **Leistung**: Beide haben eine Zeitkomplexität von $$O(V + E)$$, aber die tatsächliche Leistung kann je nach Struktur des Graphen variieren.
+
+### Sortieralgorithmen
+
+- **Bubble Sort vs. Insertion Sort**:
+  - **Leistung**: Beide haben eine Zeitkomplexität von $$O(n^2)$$, aber Insertion Sort ist in der Praxis oft schneller.
+  - **Speicherverbrauch**: Beide Algorithmen haben einen Speicherverbrauch von $$O(1)$$, da sie in-place sortieren.
+
+- **Merge Sort vs. Quick Sort**:
+  - **Leistung**: Merge Sort hat eine garantierte Zeitkomplexität von $$O(n \log n)$$, während Quick Sort im Durchschnitt $$O(n \log n)$$, aber im schlimmsten Fall $$O(n^2)$$ hat.
+  - **Speicherverbrauch**: Merge Sort benötigt zusätzlichen Speicherplatz ($$O(n)$$), während Quick Sort in-place sortiert und nur $$O(\log n)$$ Speicher für den Call-Stack benötigt.
+  - **Stabilität**: Merge Sort ist stabil, Quick Sort nicht.
+
+
