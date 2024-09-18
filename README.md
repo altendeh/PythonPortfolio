@@ -141,57 +141,16 @@ Hauptklasse für die Musik-Anwendung.
 - `create_random_songs(self, count)`: Erstellt eine bestimmte Anzahl zufälliger Lieder.
 - `main_menu(self)`: Hauptmenü der Musik-App.
 
-## Suchalgorithmen
-
-### Iterative Suche
-- **Big O Notation**: $$O(n)$$
-- **Funktionsweise**: Diese Methode durchsucht die Elemente der Datenstruktur nacheinander, bis das gesuchte Element gefunden wird oder alle Elemente durchsucht wurden.
-
-### Rekursive Suche
-- **Big O Notation**: $$O(n)$$
-- **Funktionsweise**: Ähnlich wie die iterative Suche, aber sie verwendet Rekursion, um die Elemente zu durchsuchen. Dies kann zu einer höheren Speicherbelastung führen.
-
-### Breitensuche (BFS)
-- **Big O Notation**: $$O(log n)$$
-- **Funktionsweise**: BFS durchsucht die Knoten eines Graphen schichtweise, beginnend bei einem Startknoten und erkundet alle Nachbarn, bevor es zu den Nachbarn der Nachbarn übergeht.
-
-### Tiefensuche (DFS)
-- **Big O Notation**: $$O(log n)$$
-- **Funktionsweise**: DFS durchsucht die Knoten eines Graphen, indem es so tief wie möglich in einen Zweig des Graphen geht, bevor es zurückkehrt und andere Zweige erkundet.
-
-## Sortieralgorithmen
-
-### Bubble Sort
-- **Big O Notation**: $$O(n^2)$$
-- **Funktionsweise**: Vergleicht benachbarte Elemente und vertauscht sie, wenn sie in der falschen Reihenfolge sind. Dieser Vorgang wird wiederholt, bis die Liste sortiert ist.
-
-### Insertion Sort
-- **Big O Notation**: $$O(n^2)$$
-- **Funktionsweise**: Baut die sortierte Liste schrittweise auf, indem es jedes neue Element an die richtige Position in der bereits sortierten Liste einfügt.
-
-### Merge Sort
-- **Big O Notation**: $$O(n \log n)$$
-- **Funktionsweise**: Teilt die Liste wiederholt in zwei Hälften, sortiert jede Hälfte rekursiv und fügt die sortierten Hälften dann zusammen.
-
-### Quick Sort
-- **Big O Notation**: $$O(n \log n)$$ im Durchschnitt, $$O(n^2)$$ im schlimmsten Fall
-- **Funktionsweise**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
-
-
-
-
-
-
 
 
 ## Suchalgorithmen
 
-### Iterative Suche
+### Iterative Binärsuche
 - **Beschreibung**: Durchläuft die Elemente einer Datenstruktur nacheinander in einer Schleife.
 - **Leistung**: Zeitkomplexität von $$O(n)$$.
 - **Speicherverbrauch**: $$O(1)$$, da keine zusätzlichen Datenstrukturen oder Rekursionsaufrufe verwendet werden.
 
-### Rekursive Suche
+### Rekursive Binärsuche
 - **Beschreibung**: Verwendet Rekursion, um die Elemente einer Datenstruktur zu durchsuchen.
 - **Leistung**: Zeitkomplexität von $$O(n)$$.
 - **Speicherverbrauch**: $$O(n)$$ im schlimmsten Fall, da jeder Rekursionsaufruf zusätzlichen Speicher auf dem Call-Stack benötigt.
