@@ -150,11 +150,11 @@ Hauptklasse für die Musik-Anwendung.
 - **Funktionsweise**: Ähnlich wie die iterative Suche, aber sie verwendet Rekursion, um die Elemente zu durchsuchen. Dies kann zu einer höheren Speicherbelastung führen.
 
 ### Breitensuche (BFS)
-- **Big O Notation**: $$O(V + E)$$, wobei V die Anzahl der Knoten und E die Anzahl der Kanten ist.
+- **Big O Notation**: $$O(log n)$$
 - **Funktionsweise**: BFS durchsucht die Knoten eines Graphen schichtweise, beginnend bei einem Startknoten und erkundet alle Nachbarn, bevor es zu den Nachbarn der Nachbarn übergeht.
 
 ### Tiefensuche (DFS)
-- **Big O Notation**: $$O(V + E)$$
+- **Big O Notation**: $$O(log n)$$
 - **Funktionsweise**: DFS durchsucht die Knoten eines Graphen, indem es so tief wie möglich in einen Zweig des Graphen geht, bevor es zurückkehrt und andere Zweige erkundet.
 
 ## Sortieralgorithmen
