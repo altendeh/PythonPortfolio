@@ -1,14 +1,51 @@
 # Musik-Anwendung
 
+
+linear Search und die einzelnen Laufzeiten hinzufügen
 ## Übersicht
 Diese Musik-Anwendung ermöglicht es Benutzern, eine Bibliothek von Liedern zu verwalten, Playlists zu erstellen und zu verwalten sowie verschiedene Operationen wie Hinzufügen, Entfernen, Suchen und Sortieren von Liedern durchzuführen. Die Anwendung verwendet einen Rot-Schwarz-Baum bzw. einen Binären Suchbaum für eine effiziente Verwaltung der Lieder.
 
+## Anleitung
+Um die Musik-Anwendung zu verwenden, führen Sie das Skript aus. Das Hauptmenü bietet Optionen zum Hinzufügen neuer Lieder, Erstellen von Playlists, Hinzufügen von Liedern zu Playlists, Entfernen von Liedern aus Playlists, Suchen von Liedern, Sortieren von Liedern, Anzeigen aller Lieder, Anzeigen von Playlists, Löschen von Liedern aus der Bibliothek und Erstellen zufälliger Lieder.
+
+## Beispiel
+
+```python
+if __name__ == "__main__":
+    app = MusicApp()
+    app.main_menu()
+```
+
+
+
+
 ## Vorgehen
-1. **Anforderungsanalyse**: Bestimme die Anforderungen und Funktionen der Anwendung, wie das Hinzufügen, Entfernen, Suchen und Sortieren von Liedern sowie das Erstellen und Verwalten von Playlists.
-2. **Design**: Entwerfe die Architektur der Anwendung, einschließlich der Klassen und Methoden, die benötigt werden, um die Anforderungen zu erfüllen.
-3. **Implementierung**: Implementiere die Klassen und Methoden gemäß dem Design. Stelle sicher, dass die Anwendung die grundlegenden Funktionen wie das Hinzufügen und Entfernen von Liedern sowie das Erstellen und Verwalten von Playlists unterstützt.
-4. **Testen**: Teste die Anwendung gründlich, um sicherzustellen, dass alle Funktionen korrekt arbeiten und keine Fehler auftreten.
-5. **Dokumentation**: Erstelle eine umfassende Dokumentation, die die Verwendung der Anwendung sowie die Implementierungsdetails beschreibt.
+
+1. **Anforderungen analysiert**:
+   - Die grundlegenden Funktionen der Anwendung wurden definiert, einschließlich Hinzufügen, Entfernen, Suchen und Sortieren von Liedern.
+   - Die zu verwendenden Datenstrukturen wurden bestimmt, Rot-Schwarz-Baum und Binärer Suchbaum.
+
+2. **Design der Anwendung abgeschlossen**:
+   - Die Klassen und ihre Methoden wurden entworfen, um die Anforderungen zu erfüllen.
+   - Ein Klassendiagramm wurde erstellt, um die Beziehungen zwischen den Klassen zu visualisieren. (siehe Klassen und Methoden)
+
+3. **Implementierung durchgeführt**:
+   - Die `Song`-Klasse und ihre Methoden wurden implementiert.
+   - Die `Playlist`-Klasse und ihre Methoden wurden implementiert.
+   - Die `RedBlackTree`- und `BinarySearchTree`-Klassen sowie deren Knotenklassen (`RedBlackNode` und `TreeNode`) wurden implementiert.
+   - Die `MusicApp`-Klasse und ihre Methoden wurden implementiert.
+
+4. **Tests durchgeführt**:
+   - Unit-Tests für jede Klasse und Methode wurden geschrieben, um deren korrekte Funktion sicherzustellen.
+   - Die Anwendung wurde als Ganzes getestet, um sicherzustellen, dass alle Komponenten zusammenarbeiten.
+
+5. **Dokumentation erstellt**:
+   - Der Code wurde mit Kommentaren und Docstrings dokumentiert.
+   - Eine Benutzeranleitung wurde erstellt, die erklärt, wie die Anwendung verwendet wird.
+
+6. **Optimierung durchgeführt**:
+   - Die Leistung der Such- und Sortieralgorithmen wurde analysiert.
+   - Der Code wurde optimiert, um die Effizienz zu verbessern.
 
 ## Klassen und Methoden
 
@@ -104,50 +141,73 @@ Hauptklasse für die Musik-Anwendung.
 - `create_random_songs(self, count)`: Erstellt eine bestimmte Anzahl zufälliger Lieder.
 - `main_menu(self)`: Hauptmenü der Musik-App.
 
+
+
 ## Suchalgorithmen
 
-### Iterative Suche
-- **Big O Notation**: $$O(n)$$
-- **Funktionsweise**: Diese Methode durchsucht die Elemente der Datenstruktur nacheinander, bis das gesuchte Element gefunden wird oder alle Elemente durchsucht wurden.
+### Iterative Binärsuche
+- **Beschreibung**: Durchläuft die Elemente einer Datenstruktur nacheinander in einer Schleife.
+- **Leistung**: Zeitkomplexität von $$O(n)$$.
+- **Speicherverbrauch**: $$O(1)$$, da keine zusätzlichen Datenstrukturen oder Rekursionsaufrufe verwendet werden.
 
-### Rekursive Suche
-- **Big O Notation**: $$O(n)$$
-- **Funktionsweise**: Ähnlich wie die iterative Suche, aber sie verwendet Rekursion, um die Elemente zu durchsuchen. Dies kann zu einer höheren Speicherbelastung führen.
+### Rekursive Binärsuche
+- **Beschreibung**: Verwendet Rekursion, um die Elemente einer Datenstruktur zu durchsuchen.
+- **Leistung**: Zeitkomplexität von $$O(n)$$.
+- **Speicherverbrauch**: $$O(n)$$ im schlimmsten Fall, da jeder Rekursionsaufruf zusätzlichen Speicher auf dem Call-Stack benötigt.
 
 ### Breitensuche (BFS)
-- **Big O Notation**: $$O(V + E)$$, wobei V die Anzahl der Knoten und E die Anzahl der Kanten ist.
-- **Funktionsweise**: BFS durchsucht die Knoten eines Graphen schichtweise, beginnend bei einem Startknoten und erkundet alle Nachbarn, bevor es zu den Nachbarn der Nachbarn übergeht.
+- **Beschreibung**: Durchsucht die Knoten eines Graphen schichtweise.
+- **Leistung**: Zeitkomplexität von $$O(V + E)$$, wobei V die Anzahl der Knoten und E die Anzahl der Kanten ist.
+- **Speicherverbrauch**: $$O(V)$$, da alle Knoten auf der aktuellen Ebene gespeichert werden müssen.
 
 ### Tiefensuche (DFS)
-- **Big O Notation**: $$O(V + E)$$
-- **Funktionsweise**: DFS durchsucht die Knoten eines Graphen, indem es so tief wie möglich in einen Zweig des Graphen geht, bevor es zurückkehrt und andere Zweige erkundet.
+- **Beschreibung**: Durchsucht die Knoten eines Graphen, indem es so tief wie möglich in einen Zweig des Graphen geht.
+- **Leistung**: Zeitkomplexität von $$O(V + E)$$.
+- **Speicherverbrauch**: $$O(V)$$ im schlimmsten Fall, da der aktuelle Pfad auf dem Call-Stack gespeichert wird.
 
 ## Sortieralgorithmen
 
 ### Bubble Sort
-- **Big O Notation**: $$O(n^2)$$
-- **Funktionsweise**: Vergleicht benachbarte Elemente und vertauscht sie, wenn sie in der falschen Reihenfolge sind. Dieser Vorgang wird wiederholt, bis die Liste sortiert ist.
+- **Beschreibung**: Vergleicht benachbarte Elemente und vertauscht sie, wenn sie in der falschen Reihenfolge sind.
+- **Leistung**: Zeitkomplexität von $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(1)$$, da in-place sortiert wird und keine zusätzlichen Datenstrukturen benötigt werden.
 
 ### Insertion Sort
-- **Big O Notation**: $$O(n^2)$$
-- **Funktionsweise**: Baut die sortierte Liste schrittweise auf, indem es jedes neue Element an die richtige Position in der bereits sortierten Liste einfügt.
+- **Beschreibung**: Baut die sortierte Liste schrittweise auf, indem es jedes neue Element an die richtige Position in der bereits sortierten Liste einfügt.
+- **Leistung**: Zeitkomplexität von $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(1)$$, da in-place sortiert wird.
 
 ### Merge Sort
-- **Big O Notation**: $$O(n \log n)$$
-- **Funktionsweise**: Teilt die Liste wiederholt in zwei Hälften, sortiert jede Hälfte rekursiv und fügt die sortierten Hälften dann zusammen.
+- **Beschreibung**: Teilt die Liste wiederholt in zwei Hälften, sortiert jede Hälfte rekursiv und fügt die sortierten Hälften dann zusammen.
+- **Leistung**: Zeitkomplexität von $$O(n \log n)$$.
+- **Speicherverbrauch**: $$O(n)$$, da zusätzlicher Speicherplatz für die temporären Arrays benötigt wird.
 
 ### Quick Sort
-- **Big O Notation**: $$O(n \log n)$$ im Durchschnitt, $$O(n^2)$$ im schlimmsten Fall
-- **Funktionsweise**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
+- **Beschreibung**: Wählt ein "Pivot"-Element und partitioniert die Liste so, dass alle Elemente kleiner als das Pivot links und alle größeren rechts sind. Sortiert dann rekursiv die Teillisten.
+- **Leistung**: Durchschnittliche Zeitkomplexität von $$O(n \log n)$$, schlimmster Fall $$O(n^2)$$.
+- **Speicherverbrauch**: $$O(\log n)$$ im Durchschnitt, da der Call-Stack für die Rekursion verwendet wird.
 
-## Verwendung
-Um die Musik-Anwendung zu verwenden, führen Sie das Skript aus. Das Hauptmenü bietet Optionen zum Hinzufügen neuer Lieder, Erstellen von Playlists, Hinzufügen von Liedern zu Playlists, Entfernen von Liedern aus Playlists, Suchen von Liedern, Sortieren von Liedern, Anzeigen aller Lieder, Anzeigen von Playlists, Löschen von Liedern aus der Bibliothek und Erstellen zufälliger Lieder.
+## Vergleich der Algorithmen
 
-## Beispiel
+### Suchalgorithmen
 
-```python
-if __name__ == "__main__":
-    app = MusicApp()
-    app.main_menu()
+- **Iterative Suche vs. Rekursive Suche**:
+  - **Speicherverbrauch**: Iterative Suche verwendet weniger Speicher ($$O(1)$$) im Vergleich zur rekursiven Suche ($$O(n)$$).
+  - **Leistung**: Beide haben eine ähnliche Zeitkomplexität von $$O(n)$$, aber die iterative Suche kann in der Praxis schneller sein.
+
+- **Breitensuche (BFS) vs. Tiefensuche (DFS)**:
+  - **Speicherverbrauch**: BFS kann mehr Speicher ($$O(V)$$) benötigen, da es alle Knoten auf der aktuellen Ebene speichert, während DFS nur den aktuellen Pfad speichert ($$O(V)$$ im schlimmsten Fall).
+  - **Leistung**: Beide haben eine Zeitkomplexität von $$O(V + E)$$, aber die tatsächliche Leistung kann je nach Struktur des Graphen variieren.
+
+### Sortieralgorithmen
+
+- **Bubble Sort vs. Insertion Sort**:
+  - **Leistung**: Beide haben eine Zeitkomplexität von $$O(n^2)$$, aber Insertion Sort ist in der Praxis oft schneller.
+  - **Speicherverbrauch**: Beide Algorithmen haben einen Speicherverbrauch von $$O(1)$$, da sie in-place sortieren.
+
+- **Merge Sort vs. Quick Sort**:
+  - **Leistung**: Merge Sort hat eine garantierte Zeitkomplexität von $$O(n \log n)$$, während Quick Sort im Durchschnitt $$O(n \log n)$$, aber im schlimmsten Fall $$O(n^2)$$ hat.
+  - **Speicherverbrauch**: Merge Sort benötigt zusätzlichen Speicherplatz ($$O(n)$$), während Quick Sort in-place sortiert und nur $$O(\log n)$$ Speicher für den Call-Stack benötigt.
+  - **Stabilität**: Merge Sort ist stabil, Quick Sort nicht.
 
 
