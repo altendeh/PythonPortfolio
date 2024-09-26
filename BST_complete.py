@@ -106,20 +106,21 @@ class BinarySearchTree:
                 node.right = TreeNode(song)
             else:
                 self._insert_recursive(node.right, song)
+                
 
-    def search_recursive(self, node, value, criteria):
-        #Sucht rekursiv nach einem Song-Objekt im Baum basierend auf einem Kriterium
+    def search_binary_recursive(self, node, value, criteria):
+        #Sucht rekursiv binär nach einem Song-Objekt im Baum basierend auf einem Kriterium
         if node is None:
             return None
         if getattr(node.song, criteria) == value:
             return node.song
         if value < getattr(node.song, criteria):
-            return self.search_recursive(node.left, value, criteria)
+            return self.search_binary_recursive(node.left, value, criteria)
         else:
-            return self.search_recursive(node.right, value, criteria)
+            return self.search_binary_recursive(node.right, value, criteria)
 
-    def search_iterative(self, value, criteria):
-        #Sucht iterativ nach einem Song-Objekt im Baum basierend auf einem Kriterium
+    def search_binary_iterative(self, value, criteria):
+        #Sucht iterativ binär nach einem Song-Objekt im Baum basierend auf einem Kriterium
         current = self.root
         while current is not None:
             if getattr(current.song, criteria) == value:
@@ -155,6 +156,7 @@ class BinarySearchTree:
         if left_search is not None:
             return left_search
         return self.dfs_search(node.right, value, criteria)
+    
 
     def delete(self, song):
         #Löscht ein Song-Objekt aus dem binären Suchbaum
@@ -318,14 +320,16 @@ class MusicApp:
             return
     
         value = input(f"Gib {criteria} ein: ").strip()
-        search_method = input("Wähle Suchmethode - (R)ekursiv, (I)terativ, (B)reitensuche oder (T)iefensuche: ").strip().lower()
+        search_method = input("Wähle Suchmethode - (L)ineare Suche, (R)ekursive Binärsuche, (I)terative Binärsuche, (B)reitensuche oder (T)iefensuche: ").strip().lower()
 
         start_time = time.time()  #Startzeitmessung
 
-        if search_method == 'r':
-            result = self.bst.search_recursive(self.bst.root, value, criteria)
+        if search_method == 'l':
+            result = self.bst.linear_search(value, criteria)
+        elif search_method == 'r':
+            result = self.bst.search_binary_recursive(self.bst.root, value, criteria)
         elif search_method == 'i':
-            result = self.bst.search_iterative(value, criteria)
+            result = self.bst.search_binary_iterative(value, criteria)
         elif search_method == 'b':
             result = self.bst.bfs_search(value, criteria)
         elif search_method == 't':
@@ -344,6 +348,21 @@ class MusicApp:
 
         print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
 
+    def linear_search(self, value, criteria):
+        """
+        Sucht linear nach einem Song-Objekt in der Liste basierend auf einem Kriterium.
+
+        Args:
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
+        for index, song in enumerate(self.songs):
+            if getattr(song, criteria) == value:
+                return song
+        return None
+    
     def sort_songs(self):
         """
         Sortiert die Song-Objekte in der MusicApp basierend auf Benutzereingaben.
@@ -484,6 +503,7 @@ class MusicApp:
             comparison = song1.title > song2.title  #Standardmäßig nach Titel sortieren, wenn das Kriterium ungültig ist
 
         return comparison if ascending else not comparison
+    
 
     def create_playlist(self):
         """

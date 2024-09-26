@@ -253,29 +253,7 @@ class RedBlackTree:
             x.parent.left = y
         y.right = x
         x.parent = y
-
-    def search_iterative(self, value, criteria):
-        #Iterative Suche nach einem Song basierend auf einem Kriterium
-        current = self.root
-        while current != self.NIL:
-            if getattr(current.song, criteria) == value:
-                return current.song
-            elif value < getattr(current.song, criteria):
-                current = current.left
-            else:
-                current = current.right
-        return None
-
-    def _search_recursive(self, node, value, criteria):
-        #Rekursive Suche nach einem Song basierend auf einem Kriterium
-        if node == self.NIL:
-            return None
-        if getattr(node.song, criteria) == value:
-            return node.song
-        if value < getattr(node.song, criteria):
-            return self._search_recursive(node.left, value, criteria)
-        else:
-            return self._search_recursive(node.right, value, criteria)
+    
 
     def bfs_search(self, value, criteria):
         """
@@ -302,7 +280,17 @@ class RedBlackTree:
         return None
 
     def dfs_search(self, node, value, criteria):
-        #Tiefensuche nach einem Song basierend auf einem Kriterium
+        """
+        Führt eine Tiefensuche (DFS) nach einem Song-Objekt im Rot-Schwarz-Baum basierend auf einem Kriterium durch.
+
+        Args:
+            node (RedBlackNode): Der aktuelle Knoten im Baum.
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
         if node == self.NIL:
             return None
         if getattr(node.song, criteria) == value:
@@ -312,6 +300,19 @@ class RedBlackTree:
             return left_search
         return self.dfs_search(node.right, value, criteria)
 
+    def search(self, value, criteria):
+        return self._search_recursive(self.root, value, criteria)
+
+    def _search_recursive(self, node, value, criteria):
+        if node == self.NIL:
+            return None
+        if getattr(node.song, criteria) == value:
+            return node.song
+        if value < getattr(node.song, criteria):
+            return self._search_recursive(node.left, value, criteria)
+        else:
+            return self._search_recursive(node.right, value, criteria)
+        
     def delete(self, song):
         #Löscht einen Song aus dem Rot-Schwarz-Baum
         self.root = self._delete_recursive(self.root, song)
@@ -350,22 +351,32 @@ class MusicApp:
     def __init__(self):
         #Initialisiert die Musik-App und lädt Songs
         self.songs = []
+        self.sorted_songs_by_title = []
+        self.sorted_songs_by_artist = []
+        self.sorted_songs_by_genre = []
         self.playlists = []
         self.rbt = RedBlackTree()
         self.load_songs()
 
     def load_songs(self):
-        #Lädt Songs aus einer Datei beim Start der App
         if os.path.exists(self.FILENAME):
             with open(self.FILENAME, 'r') as file:
                 for line in file:
                     title, artist, album, genre = line.strip().split(',')
                     song = Song(title, artist, album, genre)
                     self.songs.append(song)
-                    self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
+                    self.rbt.insert(song)
+            self.sorted_songs_by_title = sorted(self.songs, key=lambda song: song.title)
+            self.sorted_songs_by_artist = sorted(self.songs, key=lambda song: song.artist)
+            self.sorted_songs_by_genre = sorted(self.songs, key=lambda song: song.genre)
             print(f"{len(self.songs)} Songs aus {self.FILENAME} geladen.")
+            # Überprüfe die ersten paar Songs in jeder Liste
+            print("Erste paar Songs nach Titel sortiert:", [song.title for song in self.sorted_songs_by_title[:5]])
+            print("Erste paar Songs nach Künstler sortiert:", [song.artist for song in self.sorted_songs_by_artist[:5]])
+            print("Erste paar Songs nach Genre sortiert:", [song.genre for song in self.sorted_songs_by_genre[:5]])
         else:
             print("Keine Songs gefunden. Starte mit einer leeren Musikbibliothek.")
+
 
     def save_data(self):
         #Speichert alle Songs in einer Datei
@@ -378,6 +389,9 @@ class MusicApp:
         #Fügt einen neuen Song zur Bibliothek hinzu und speichert die Daten
         song = Song(title, artist, album, genre)
         self.songs.append(song)
+        self.sorted_songs_by_title = sorted(self.songs, key=lambda song: song.title)
+        self.sorted_songs_by_artist = sorted(self.songs, key=lambda song: song.artist)
+        self.sorted_songs_by_genre = sorted(self.songs, key=lambda song: song.genre)
         self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
         self.save_data()  #Speichert die Daten nach dem Hinzufügen eines Songs
         print(f"'{song}' zur Musikbibliothek hinzugefügt.")
@@ -418,31 +432,201 @@ class MusicApp:
             return
 
         value = input(f"Gib {criteria} ein: ").strip()
-        search_method = input("Wähle Suchmethode - (R)ekursiv, (I)terativ, (B)reitensuche oder (T)iefensuche: ").strip().lower()
+        search_method = input("Wähle Suchmethode - (L)ineare Suche, (Bi)närsuche, (J)ump-Suche, (I)nterpolationssuche, (Br)eitensuche, (T)iefensuche oder (A)lle: ").strip().lower()
 
-        start_time = time.time()  #Beginn der Zeitmessung
-
-        if search_method == 'r':
-            result = self.rbt._search_recursive(self.rbt.root, value, criteria)
-        elif search_method == 'i':
-            result = self.rbt.search_iterative(value, criteria)
-        elif search_method == 'b':
-            result = self.rbt.bfs_search(value, criteria)
-        elif search_method == 't':
-            result = self.rbt.dfs_search(self.rbt.root, value, criteria)
+        if search_method == 'a':
+           self.search_all_methods(value, criteria)
         else:
-            print("Ungültige Suchmethode ausgewählt.")
-            return
+            start_time = time.time()  #Beginn der Zeitmessung 
+            
+            if search_method == 'l':
+            
+                result = self.linear_search(value, criteria)
+            
+            elif search_method == 'bi':
+            
+                result = self.binary_search(value, criteria)
+            
+            elif search_method == 'j':
+            
+                result = self.jump_search(value, criteria)
+            
+            elif search_method == 'i':
+            
+                result = self.interpolation_search(value, criteria)
+            
+            elif search_method == 'br':
+            
+                result = self.rbt.bfs_search(value, criteria)
+            
+            elif search_method == 't':
+            
+                result = self.rbt.dfs_search(self.rbt.root, value, criteria)
+            
+            else:
+            
+                print("Ungültige Suchmethode ausgewählt.")
+            
+                return
 
-        end_time = time.time()  #Ende der Zeitmessung
-        elapsed_time = end_time - start_time
+            end_time = time.time()  #Ende der Zeitmessung
+            elapsed_time = end_time - start_time
 
-        if result:
-            print(f"'{result}' in der Musikbibliothek gefunden.")
+            if result:
+                print(f"'{result}' in der Musikbibliothek gefunden.")
+            else:
+                print(f"'{value}' nicht in der Musikbibliothek gefunden.")
+
+            print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+        
+    def linear_search(self, value, criteria):
+        """
+        Sucht linear nach einem Song-Objekt in der Liste basierend auf einem Kriterium.
+
+        Args:
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
+        for index, song in enumerate(self.songs):
+            if getattr(song, criteria) == value:
+                return song
+        return None
+    
+    def binary_search(self, value, criteria):
+        if criteria == 'title':
+            sorted_songs = self.sorted_songs_by_title
+        elif criteria == 'artist':
+            sorted_songs = self.sorted_songs_by_artist
+        elif criteria == 'genre':
+            sorted_songs = self.sorted_songs_by_genre
         else:
-            print(f"'{value}' nicht in der Musikbibliothek gefunden.")
+            return None
 
-        print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+        low = 0
+        high = len(sorted_songs) - 1
+
+        while low <= high:
+            mid = (low + high) // 2
+            mid_value = getattr(sorted_songs[mid], criteria)
+
+            if mid_value == value:
+                return sorted_songs[mid]
+            elif mid_value < value:
+                low = mid + 1
+            else:
+                high = mid - 1
+
+        return None
+
+
+    
+    def jump_search(self, value, criteria):
+        """
+        Führt eine Jump-Suche nach einem Song-Objekt in der sortierten Liste basierend auf einem Kriterium durch.
+
+        Args:
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist', 'genre').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
+        if criteria == 'title':
+            sorted_songs = self.sorted_songs_by_title
+        elif criteria == 'artist':
+            sorted_songs = self.sorted_songs_by_artist
+        elif criteria == 'genre':
+            sorted_songs = self.sorted_songs_by_genre
+        else:
+            return None
+
+        n = len(sorted_songs)
+        step = int(n ** 0.5)  # Die Blockgröße für den Jump Search
+        prev = 0
+
+        # Springe durch die Liste in Schritten von 'step'
+        while prev < n and getattr(sorted_songs[min(step, n) - 1], criteria) < value:
+            prev = step
+            step += int(n ** 0.5)
+            if prev >= n:
+                return None
+
+        # Lineare Suche innerhalb des Blocks
+        for i in range(prev, min(step, n)):
+            if getattr(sorted_songs[i], criteria) == value:
+                return sorted_songs[i]
+
+        return None
+
+
+    def interpolation_search(self, value, criteria):
+        """
+        Führt eine Interpolationssuche nach einem Song-Objekt in der sortierten Liste basierend auf einem Kriterium durch.
+
+        Args:
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist', 'genre').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
+        if criteria == 'title':
+            sorted_songs = self.sorted_songs_by_title
+        elif criteria == 'artist':
+            sorted_songs = self.sorted_songs_by_artist
+        elif criteria == 'genre':
+            sorted_songs = self.sorted_songs_by_genre
+        else:
+            return None
+
+        low = 0
+        high = len(sorted_songs) - 1
+
+        while low <= high:
+            mid = low + (high - low) // 2
+            mid_value = getattr(sorted_songs[mid], criteria)
+
+            if mid_value == value:
+                return sorted_songs[mid]
+            elif mid_value < value:
+                low = mid + 1
+            else:
+                high = mid - 1
+
+        return None
+    
+    def search_all_methods(self, value, criteria):
+        """
+        Führt alle Suchmethoden nacheinander aus und gibt die Ergebnisse aus.
+
+        Args:
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist', 'album').
+
+        Returns:
+            None
+        """
+        search_methods = {
+            'Lineare Suche': self.linear_search,
+            'Binärsuche': self.binary_search,
+            'Jump-Suche': self.jump_search,
+            'Interpolationssuche': self.interpolation_search,
+            'Breitensuche': lambda v, c: self.rbt.bfs_search(v, c),
+    'Tiefensuche': lambda v, c: self.rbt.dfs_search(self.rbt.root, v, c)
+        }
+
+        for method_name, method in search_methods.items():
+            start_time = time.time()
+            result = method(value, criteria)
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+
+            if result:
+                print(f"{method_name}: '{result}' in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+            else:
+                print(f"{method_name}: '{value}' nicht in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
 
     def sort_songs(self):
         """
@@ -464,8 +648,6 @@ class MusicApp:
         print("1. Titel")
         print("2. Künstler")
         print("3. Genre")
-
-        criteria = input("Gib deine Wahl ein: ").strip()
         
         criteria = input("Gib deine Wahl ein: ").strip()
         if criteria not in ['1', '2', '3']:
@@ -617,6 +799,7 @@ class MusicApp:
                 return song1.genre > song2.genre
             else:  #Absteigend
                 return song1.genre < song2.genre
+    
 
     def create_playlist(self):
         #Erstellt eine neue Playlist
@@ -670,6 +853,9 @@ class MusicApp:
                     print(f"  - {song}")
 
     def create_random_songs(self, count):
+        # Startzeit messen
+        start_time = time.time()
+    
         #Erstellt eine bestimmte Anzahl zufälliger Songs und speichert sie auf einmal
         for _ in range(count):
             title = ''.join(random.choices(string.ascii_uppercase, k=random.randint(5, 10)))
@@ -680,8 +866,20 @@ class MusicApp:
             self.songs.append(song)
             self.rbt.insert(song)  #Fügt den Song in den Rot-Schwarz-Baum ein
 
-        self.save_data()
-        print(f"{count} zufällige Songs erstellt und gespeichert.")
+    # Sortiere die Listen nach dem Hinzufügen der zufälligen Songs
+        self.sorted_songs_by_title = sorted(self.songs, key=lambda song: song.title)
+        self.sorted_songs_by_artist = sorted(self.songs, key=lambda song: song.artist)
+        self.sorted_songs_by_genre = sorted(self.songs, key=lambda song: song.genre)
+        
+        # Endzeit messen
+        end_time = time.time()
+        
+        # Benötigte Zeit berechnen
+        elapsed_time = end_time - start_time
+        
+        print(f"{count} zufällige Songs erstellt, in einem Rot-SChwarz-Baum gespeichert und die Listen sortiert.")
+        print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+
 
 
     def main_menu(self):
