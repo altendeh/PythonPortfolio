@@ -161,6 +161,38 @@ Die `MusicApp`-Klasse implementiert die Hauptlogik der Musik-App und verwaltet d
 - `create_random_songs(self, count)`: Erstellt eine bestimmte Anzahl zufälliger Songs und speichert sie.
 - `main_menu(self)`: Hauptmenü der Musik-App.
 
+## Implementierungsdetails
+
+### Datenstrukturen
+
+Die Musik-App verwendet verschiedene Datenstrukturen, um die Songs und Playlists effizient zu verwalten. Listen werden verwendet, um Songs und Playlists zu speichern, während Rot-Schwarz-Bäume für die effiziente Verwaltung und Suche von Songs eingesetzt werden.
+
+### Algorithmen
+
+#### Sortieralgorithmen
+
+Die Musik-App implementiert mehrere Sortieralgorithmen, darunter Bubble Sort, Insertion Sort, Merge Sort und Quick Sort. Diese Algorithmen werden verwendet, um die Songs basierend auf verschiedenen Kriterien wie Titel, Künstler, Album oder Genre zu sortieren.
+
+#### Suchalgorithmen
+
+Die Musik-App verwendet verschiedene Suchalgorithmen, um Songs effizient zu finden. Dazu gehören lineare Suche, Binärsuche, Jump-Suche, Interpolationssuche, BFS und DFS. Diese Algorithmen ermöglichen es, Songs basierend auf verschiedenen Kriterien wie Titel, Künstler, Album oder Genre zu durchsuchen.
+
+### Benutzerinteraktionen
+
+Die Benutzeroberfläche der Musik-App ermöglicht es den Benutzern, verschiedene Aktionen durchzuführen, wie das Hinzufügen und Löschen von Songs, das Erstellen und Verwalten von Playlists und das Durchsuchen der Bibliothek. Diese Interaktionen werden durch die Methoden der `MusicApp`-Klasse verwaltet.
+
+### Dateiverwaltung
+
+Die Musik-App speichert und lädt Songs und Playlists in und aus Dateien. Die Methoden `load_songs` und `save_data` der `MusicApp`-Klasse sind für diese Aufgaben verantwortlich.
+
+### Fehlerbehandlung
+
+Die Musik-App enthält Mechanismen zur Fehlerbehandlung und Validierung von Benutzereingaben, um die Robustheit der Anwendung zu gewährleisten. Dies umfasst die Überprüfung der Eingaben und das Abfangen von Ausnahmen.
+
+### Leistungsmessung
+
+Die Musik-App misst die Ausführungszeit und den Speicherverbrauch der verschiedenen Algorithmen, um deren Effizienz zu bewerten. Die Methoden `measure_memory_and_time` und `measure_memory_and_time_sort` der `MusicApp`-Klasse werden für diese Messungen verwendet.
+
 # Sortieralgorithmen: Laufzeit- und Speicheranalyse
 
 ## Übersicht über die Sortieralgorithmen
