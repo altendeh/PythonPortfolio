@@ -1,0 +1,6 @@
+# Benötigte Bibliotheken für die Musik-App
+tracemalloc
+
+Um die Abhängigkeiten zu installieren, führe dann den folgenden Befehl aus:
+pip install -r requirements.txt
+

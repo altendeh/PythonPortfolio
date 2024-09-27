@@ -1,349 +1,13 @@
 import os
-import json
 import time
 import random
 import string
-
-class Song:
-    def __init__(self, title, artist, album, genre):
-        """
-        Initialisiert ein Song-Objekt.
-
-        Args:
-            title (str): Der Titel des Songs.
-            artist (str): Der Künstler des Songs.
-            album (str): Das Album, zu dem der Song gehört.
-            genre (str): Das Genre des Songs.
-        """
-        self.title = title
-        self.artist = artist
-        self.album = album
-        self.genre = genre
-
-    def __str__(self):
-        #Gibt eine lesbare Darstellung des Songs zurück
-        return f"{self.title} von {self.artist} - Album: {self.album}, Genre: {self.genre}"
-
-    def __lt__(self, other):
-        #Vergleichsoperator für weniger als, basierend auf dem Titel
-        return self.title < other.title
-
-    def __eq__(self, other):
-        #Vergleichsoperator für Gleichheit, basierend auf dem Titel
-        return self.title == other.title
-
-    def to_dict(self):
-        """
-        Konvertiert das Song-Objekt in ein Wörterbuch.
-
-        Returns:
-            dict: Ein Wörterbuch, das die Song-Attribute enthält.
-        """
-        return {
-            "title": self.title,
-            "artist": self.artist,
-            "album": self.album,
-            "genre": self.genre
-        }
-
-    @staticmethod
-    def from_dict(data):
-        """
-        Erstellt ein Song-Objekt aus einem Wörterbuch.
-
-        Args:
-            data (dict): Ein Wörterbuch mit Song-Attributen.
-
-        Returns:
-            Song: Ein Song-Objekt.
-        """
-        return Song(data['title'], data['artist'], data['album'], data['genre'])
-
-class Playlist:
-    def __init__(self, name):
-        """
-        Initialisiert eine Playlist mit einem Namen und einer leeren Songliste.
-
-        Args:
-            name (str): Der Name der Playlist.
-        """
-        self.name = name
-        self.songs = []
-
-    def add_song(self, song):
-        """
-        Fügt einen Song zur Playlist hinzu.
-
-        Args:
-            song (Song): Das hinzuzufügende Song-Objekt.
-            
-        Returns:
-            None
-        """
-        self.songs.append(song)
-    
-    def remove_song(self, title):
-        """
-        Entfernt einen Song aus der Playlist basierend auf dem Titel.
-
-        Args:
-            title (str): Der Titel des Songs, der entfernt werden soll.
-
-        Returns:
-            None
-        """
-        self.songs = [song for song in self.songs if song.title != title]
-
-    def __str__(self):
-        #Gibt eine lesbare Darstellung der Playlist zurück
-        return f"Playlist: {self.name}, Songs: {len(self.songs)}"
-
-    def to_dict(self):
-        #Konvertiert die Playlist in ein Wörterbuch
-        return {
-            "name": self.name,
-            "songs": [song.to_dict() for song in self.songs]
-        }
-
-    @staticmethod
-    def from_dict(data):
-        # Erstellt eine Playlist aus einem Wörterbuch
-        playlist = Playlist(data['name'])
-        playlist.songs = [Song.from_dict(song_data) for song_data in data['songs']]
-        return playlist
-
-class RedBlackNode:
-    def __init__(self, song):
-        #Initialisiert einen Knoten für den Rot-Schwarz-Baum
-        self.song = song
-        self.color = "RED"  #Alle neu eingefügten Knoten sind standardmäßig rot
-        self.left = None
-        self.right = None
-        self.parent = None
-
-class RedBlackTree:
-    def __init__(self):
-        #Initialisiert einen Rot-Schwarz-Baum mit einem NIL-Knoten
-        self.NIL = RedBlackNode(None)
-        self.NIL.color = "BLACK"
-        self.root = self.NIL
-
-    def insert(self, song):
-        """
-        Fügt einen neuen Song in den Rot-Schwarz-Baum ein.
-
-        Args:
-            song (Song): Das Song-Objekt, das in den Baum eingefügt werden soll.
-
-        Returns:
-            None
-        """
-        new_node = RedBlackNode(song)
-        new_node.left = self.NIL
-        new_node.right = self.NIL
-
-        parent = None
-        current = self.root
-
-        while current != self.NIL:
-            parent = current
-            if new_node.song < current.song:
-                current = current.left
-            else:
-                current = current.right
-
-        new_node.parent = parent
-
-        if parent is None:
-            self.root = new_node
-        elif new_node.song < parent.song:
-            parent.left = new_node
-        else:
-            parent.right = new_node
-
-        new_node.color = "RED"
-        self.fix_insert(new_node)
-
-    def fix_insert(self, node):
-        """
-        Fixiert den Baum nach dem Einfügen, um die Rot-Schwarz-Eigenschaften zu bewahren.
-
-        Args:
-            node (RedBlackNode): Der neu eingefügte Knoten, der fixiert werden muss.
-
-        Returns:
-            None
-        """
-        while node != self.root and node.parent.color == "RED":
-            if node.parent == node.parent.parent.left:
-                uncle = node.parent.parent.right
-                if uncle.color == "RED":
-                    node.parent.color = "BLACK"
-                    uncle.color = "BLACK"
-                    node.parent.parent.color = "RED"
-                    node = node.parent.parent
-                else:
-                    if node == node.parent.right:
-                        node = node.parent
-                        self.left_rotate(node)
-                    node.parent.color = "BLACK"
-                    node.parent.parent.color = "RED"
-                    self.right_rotate(node.parent.parent)
-            else:
-                uncle = node.parent.parent.left
-                if uncle.color == "RED":
-                    node.parent.color = "BLACK"
-                    uncle.color = "BLACK"
-                    node.parent.parent.color = "RED"
-                    node = node.parent.parent
-                else:
-                    if node == node.parent.left:
-                        node = node.parent
-                        self.right_rotate(node)
-                    node.parent.color = "BLACK"
-                    node.parent.parent.color = "RED"
-                    self.left_rotate(node.parent.parent)
-
-        self.root.color = "BLACK"
-
-    def left_rotate(self, x):
-        """
-        Führt eine Linksrotation durch.
-
-        Args:
-            x (RedBlackNode): Der Knoten, um den die Linksrotation durchgeführt wird.
-
-        Returns:
-            None
-        """
-        y = x.right
-        x.right = y.left
-        if y.left != self.NIL:
-            y.left.parent = x
-        y.parent = x.parent
-        if x.parent is None:
-            self.root = y
-        elif x == x.parent.left:
-            x.parent.left = y
-        else:
-            x.parent.right = y
-        y.left = x
-        x.parent = y
-
-    def right_rotate(self, x):
-        """
-        Führt eine Rechtsrotation durch.
-
-        Args:
-            x (RedBlackNode): Der Knoten, um den die Rechtsrotation durchgeführt wird.
-
-        Returns:
-            None
-        """
-        y = x.left
-        x.left = y.right
-        if y.right != self.NIL:
-            y.right.parent = x
-        y.parent = x.parent
-        if x.parent is None:
-            self.root = y
-        elif x.parent.right == x:
-            x.parent.right = y
-        else:
-            x.parent.left = y
-        y.right = x
-        x.parent = y
-    
-
-    def bfs_search(self, value, criteria):
-        """
-        Breitensuche nach einem Song basierend auf einem Kriterium.
-
-        Args:
-            value (str): Der Wert des Suchkriteriums.
-            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
-
-        Returns:
-            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
-        """
-        if self.root == self.NIL:
-            return None
-        queue = [self.root]
-        while queue:
-            node = queue.pop(0)
-            if getattr(node.song, criteria) == value:
-                return node.song
-            if node.left != self.NIL:
-                queue.append(node.left)
-            if node.right != self.NIL:
-                queue.append(node.right)
-        return None
-
-    def dfs_search(self, node, value, criteria):
-        """
-        Führt eine Tiefensuche (DFS) nach einem Song-Objekt im Rot-Schwarz-Baum basierend auf einem Kriterium durch.
-
-        Args:
-            node (RedBlackNode): Der aktuelle Knoten im Baum.
-            value (str): Der Wert des Suchkriteriums.
-            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
-
-        Returns:
-            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
-        """
-        if node == self.NIL:
-            return None
-        if getattr(node.song, criteria) == value:
-            return node.song
-        left_search = self.dfs_search(node.left, value, criteria)
-        if left_search is not None:
-            return left_search
-        return self.dfs_search(node.right, value, criteria)
-
-    def search(self, value, criteria):
-        return self._search_recursive(self.root, value, criteria)
-
-    def _search_recursive(self, node, value, criteria):
-        if node == self.NIL:
-            return None
-        if getattr(node.song, criteria) == value:
-            return node.song
-        if value < getattr(node.song, criteria):
-            return self._search_recursive(node.left, value, criteria)
-        else:
-            return self._search_recursive(node.right, value, criteria)
-        
-    def delete(self, song):
-        #Löscht einen Song aus dem Rot-Schwarz-Baum
-        self.root = self._delete_recursive(self.root, song)
-
-    def _delete_recursive(self, node, song):
-        #Rekursive Methode zum Löschen eines Songs
-        if node == self.NIL:
-            return node
-
-        if song < node.song:
-            node.left = self._delete_recursive(node.left, song)
-        elif song > node.song:
-            node.right = self._delete_recursive(node.right, song)
-        else:
-            if node.left == self.NIL:
-                return node.right
-            elif node.right == self.NIL:
-                return node.left
-
-            temp = self._min_value_node(node.right)
-            node.song = temp.song
-            node.right = self._delete_recursive(node.right, temp.song)
-
-        return node
-
-    def _min_value_node(self, node):
-        #Findet den Knoten mit dem minimalen Wert
-        current = node
-        while current.left != self.NIL:
-            current = current.left
-        return current
+import sys
+import tracemalloc
+import copy
+from song import Song
+from playlist import Playlist
+from red_black_tree import RedBlackTree
 
 class MusicApp:
     FILENAME = "songs_RBT.csv"
@@ -379,11 +43,34 @@ class MusicApp:
 
 
     def save_data(self):
-        #Speichert alle Songs in einer Datei
-        with open(self.FILENAME, 'w') as file:
-            for song in self.songs:
-                file.write(f"{song.title},{song.artist},{song.album},{song.genre}\n")
-        print(f"{len(self.songs)} Songs in {self.FILENAME} gespeichert.")
+        print("save_data wurde aufgerufen.")  # Debug-Ausgabe
+        # Ausgabe der Songs vor dem Speichern zur Überprüfung (zum Debuggen genutzt)
+        #print("Songs vor dem Speichern:")
+        #for song in self.songs:
+        #    print(f"{song.title} - {song.artist} - {song.album} - {song.genre}")
+
+        # Speichert alle Songs in einer Datei
+        try:
+            with open(self.FILENAME, 'w') as file:
+                for song in self.songs:
+                    file.write(f"{song.title},{song.artist},{song.album},{song.genre}\n")
+            print(f"{len(self.songs)} Songs in {self.FILENAME} gespeichert.")
+        except Exception as e:
+            print(f"Fehler beim Speichern der Datei: {e}")
+
+        # Überprüfe die Datei nach dem Speichern (zum Debuggen genutzt)
+        #self.verify_saved_data() 
+
+    def verify_saved_data(self):
+        try:
+            with open(self.FILENAME, 'r') as file:
+                lines = file.readlines()
+                print("Gespeicherte Songs:")
+                for line in lines:
+                    print(line.strip())
+        except Exception as e:
+            print(f"Fehler beim Lesen der Datei: {e}")
+
 
     def add_song(self, title, artist, album, genre):
         #Fügt einen neuen Song zur Bibliothek hinzu und speichert die Daten
@@ -417,8 +104,40 @@ class MusicApp:
             for song in self.songs:
                 print(song)
 
+    def measure_memory_and_time(self, method, *args):
+        # Starten der Speicherverfolgung
+        tracemalloc.start()
+
+        # Messen der Speicherkapazität vor der Suche
+        initial_snapshot = tracemalloc.take_snapshot()
+
+        # Startzeit messen
+        start_time = time.time()
+
+        # Ausführen der Suchmethode
+        result = method(*args)
+        
+        # Endzeit messen
+        end_time = time.time()
+
+        # Messen der Speicherkapazität nach der Suche
+        final_snapshot = tracemalloc.take_snapshot()
+
+        # Benötigte Zeit berechnen
+        elapsed_time = end_time - start_time
+
+        # Verwendete Speicherkapazität berechnen
+        stats = final_snapshot.compare_to(initial_snapshot, 'lineno')
+        used_memory = sum(stat.size_diff for stat in stats)
+
+        # Speicherverfolgung stoppen
+        tracemalloc.stop()
+
+        return result, elapsed_time, used_memory
+    
+    
+
     def search_song(self):
-        #Sucht nach einem Song basierend auf einem Kriterium und einer Suchmethode
         print("Suche nach einem Song:")
         criteria = input("Suche nach (T)itel, (K)ünstler oder (G)enre: ").strip().lower()
         if criteria == 't':
@@ -432,52 +151,54 @@ class MusicApp:
             return
 
         value = input(f"Gib {criteria} ein: ").strip()
-        search_method = input("Wähle Suchmethode - (L)ineare Suche, (Bi)närsuche, (J)ump-Suche, (I)nterpolationssuche, (Br)eitensuche, (T)iefensuche oder (A)lle: ").strip().lower()
+        search_method_input = input("Wähle Suchmethode - (L)ineare Suche, (Bi)närsuche, (J)ump-Suche, (I)nterpolationssuche, (Br)eitensuche, (T)iefensuche oder (A)lle: ").strip().lower()
 
-        if search_method == 'a':
-           self.search_all_methods(value, criteria)
-        else:
-            start_time = time.time()  #Beginn der Zeitmessung 
-            
-            if search_method == 'l':
-            
-                result = self.linear_search(value, criteria)
-            
-            elif search_method == 'bi':
-            
-                result = self.binary_search(value, criteria)
-            
-            elif search_method == 'j':
-            
-                result = self.jump_search(value, criteria)
-            
-            elif search_method == 'i':
-            
-                result = self.interpolation_search(value, criteria)
-            
-            elif search_method == 'br':
-            
-                result = self.rbt.bfs_search(value, criteria)
-            
-            elif search_method == 't':
-            
-                result = self.rbt.dfs_search(self.rbt.root, value, criteria)
-            
-            else:
-            
-                print("Ungültige Suchmethode ausgewählt.")
-            
-                return
+        search_methods_map = {
+            'l': ('Lineare Suche', self.linear_search),
+            'bi': ('Binärsuche', self.binary_search),
+            'j': ('Jump-Suche', self.jump_search),
+            'i': ('Interpolationssuche', self.interpolation_search),
+            'br': ('Breitensuche', lambda v, c: self.rbt.bfs_search(v, c)),
+            't': ('Tiefensuche', lambda v, c: self.rbt.dfs_search(self.rbt.root, v, c))
+        }
 
-            end_time = time.time()  #Ende der Zeitmessung
-            elapsed_time = end_time - start_time
+        if search_method_input == 'a':
+            results = []
+            for method_key, (method_name, method) in search_methods_map.items():
+                print(f"{method_name} wird ausgeführt...")  # Anzeige, dass der Algorithmus läuft
+                result, elapsed_time, used_memory = self.measure_memory_and_time(method, value, criteria)
+                results.append((method_name, result, elapsed_time, used_memory))
+                print(f"{method_name}: '{result}' in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
 
+            # Übersicht über alle Suchalgorithmen
+            print("\nÜbersicht über alle Suchalgorithmen:")
+            for method_name, result, elapsed_time, used_memory in results:
+                print(f"{method_name}: Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
+
+        elif search_method_input in search_methods_map:
+            method_name, method = search_methods_map[search_method_input]
+            print(f"{method_name} wird ausgeführt...")  # Anzeige, dass der Algorithmus läuft
+            result, elapsed_time, used_memory = self.measure_memory_and_time(method, value, criteria)
             if result:
                 print(f"'{result}' in der Musikbibliothek gefunden.")
             else:
                 print(f"'{value}' nicht in der Musikbibliothek gefunden.")
 
-            print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+            print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
+    
+    def measure_memory_and_time(self, search_method, *args):
+        tracemalloc.start()
+        start_time = time.time()
+    
+        # Aufruf des Suchalgorithmus
+        result = search_method(*args)
+    
+        elapsed_time = time.time() - start_time
+        current, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+    
+        return result, elapsed_time, peak
+
         
     def linear_search(self, value, criteria):
         """
@@ -627,58 +348,126 @@ class MusicApp:
                 print(f"{method_name}: '{result}' in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
             else:
                 print(f"{method_name}: '{value}' nicht in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
+                
+    def measure_memory_and_time_sort(self, sort_method, *args):
+    
+        tracemalloc.start()
+        start_time = time.time()
+
+        # Aufruf des Sortieralgorithmus
+        sort_method(*args)
+
+        elapsed_time = time.time() - start_time
+        current, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+
+        return  elapsed_time, peak
+
+    def print_songs(self, message):
+        print(message)
+        for song in self.songs:
+            print(f"{song.title} - {song.artist} - {song.album} - {song.genre}")
+
 
     def sort_songs(self):
-        """
-        Sortiert die Songs basierend auf einem Kriterium und einer Sortiermethode.
+       print("Wähle Sortieralgorithmus:")
+       print("1. Bubble Sort")
+       print("2. Insertion Sort")
+       print("3. Merge Sort")
+       print("4. Quick Sort")
+       print("5. Alle")
 
-        Returns:
-            None
-        """
-        print("Wähle Sortierreihenfolge:")
+       choice = input("Gib deine Wahl ein: ").strip()
+
+       sort_methods_map = {
+           '1': ('Bubble Sort', self.bubble_sort),
+           '2': ('Insertion Sort', self.insertion_sort),
+           '3': ('Merge Sort', self.merge_sort),
+           '4': ('Quick Sort', self.quick_sort)
+       }
+
+       criteria_map = {
+           '1': 'Titel',
+           '2': 'Künstler',
+           '3': 'Genre'
+       }
+
+       if choice == '5':
+           order, criteria = self.get_sort_order_and_criteria("alle Algorithmen")
+           if not order or not criteria:
+               return
+
+           criteria_name = criteria_map[criteria]
+           results = []
+           original_songs = copy.deepcopy(self.songs)  # Originaldatenstruktur kopieren
+
+           for method_key, (method_name, method) in sort_methods_map.items():
+               #print(f"{method_name} wird ausgeführt.")  # Debug-Ausgabe
+               self.songs = copy.deepcopy(original_songs)  # Datenstruktur für jeden Algorithmus zurücksetzen
+
+               if method_key == '4':  # Quick Sort
+                   print("quick_sort wurde aufgerufen.")  # Debug-Ausgabe
+                   elapsed_time, used_memory = self.measure_memory_and_time_sort(method, 0, len(self.songs) - 1, order, criteria)
+               else:
+                   elapsed_time, used_memory = self.measure_memory_and_time_sort(method, order, criteria)
+
+
+            
+               print(f"{method_name} (Sortierung nach {criteria_name}, {'aufsteigend' if order == '1' else 'absteigend'}): Sortierung abgeschlossen. Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
+               results.append((method_name, elapsed_time, used_memory))
+
+           # Übersicht über alle Laufzeiten und Speicherverbräuche
+           print("\nÜbersicht über alle Sortieralgorithmen:")
+           for method_name, elapsed_time, used_memory in results:
+               print(f"{method_name}: Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
+
+           self.save_data()  # Speichern der Daten nach Abschluss aller Sortierungen
+
+       else:
+           method_name, method = sort_methods_map.get(choice, (None, None))
+           if method:
+               order, criteria = self.get_sort_order_and_criteria(method_name)
+               if order and criteria:
+                   criteria_name = criteria_map[criteria]
+                   #print(f"{method_name} wird ausgeführt.")  # Debug-Ausgabe
+                   if method_name == 'Quick Sort':
+                       print("quick_sort wurde aufgerufen.")  # Debug-Ausgabe
+                       elapsed_time, used_memory = self.measure_memory_and_time_sort(method, 0, len(self.songs) - 1, order, criteria)
+                   else:
+                       elapsed_time, used_memory = self.measure_memory_and_time_sort(method, order, criteria)
+
+                   
+                   print(f"{method_name} (Sortierung nach {criteria_name}, {'aufsteigend' if order == '1' else 'absteigend'}): Sortierung abgeschlossen. Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
+                   self.save_data()  # Speichern der Daten nach Abschluss der Sortierung
+           else:
+               print("Ungültige Wahl. Bitte versuche es erneut.")
+    
+
+
+
+    def get_sort_order_and_criteria(self, method_name):
+        print(f"Wähle Sortierreihenfolge für {method_name}:")
         print("1. Aufsteigend")
         print("2. Absteigend")
 
         order = input("Gib deine Wahl ein: ").strip()
         if order not in ['1', '2']:
             print("Ungültige Sortierreihenfolge. Bitte wähle '1' für aufsteigend oder '2' für absteigend.")
-            return
+            return None, None
 
-        print("Wähle Sortierkriterium:")
+        print(f"Wähle Sortierkriterium für {method_name}:")
         print("1. Titel")
         print("2. Künstler")
         print("3. Genre")
-        
+
         criteria = input("Gib deine Wahl ein: ").strip()
         if criteria not in ['1', '2', '3']:
             print("Ungültiges Sortierkriterium. Bitte wähle '1' für Titel, '2' für Künstler oder '3' für Genre.")
-            return
-        
-        print("Wähle Sortieralgorithmus:")
-        print("1. Bubble Sort")
-        print("2. Insertion Sort")
-        print("3. Merge Sort")
-        print("4. Quick Sort")
+            return None, None
 
-        choice = input("Gib deine Wahl ein: ").strip()
+        return order, criteria
 
-        #Messen der Zeit, die zum Sortieren benötigt wird
-        start_time = time.time()
-        if choice == '1':
-            self.bubble_sort(order, criteria)
-        elif choice == '2':
-            self.insertion_sort(order, criteria)
-        elif choice == '3':
-            self.songs = self.merge_sort(self.songs, order, criteria)
-        elif choice == '4':
-            self.quick_sort(0, len(self.songs) - 1, order, criteria)
-        else:
-            print("Ungültige Wahl.")
-            return
-        
-        print(f"Benötigte Zeit: {time.time() - start_time:.6f} Sekunden.")
-        self.save_data()  #Speichern der sortierten Liste in der Datei
-
+            
     def bubble_sort(self, order, criteria):
         """
         Implementiert den Bubble Sort Algorithmus.
@@ -690,19 +479,23 @@ class MusicApp:
         Returns:
             None
         """
+        print("bubble_sort wurde aufgerufen.")  # Debug-Ausgabe
         n = len(self.songs)
         for i in range(n):
             swapped = False
             for j in range(0, n - i - 1):
                 if self.compare(self.songs[j], self.songs[j + 1], order, criteria):
+                    #print(f"Tausche {self.songs[j].title} mit {self.songs[j + 1].title}")  # Debug-Ausgabe
                     self.songs[j], self.songs[j + 1] = self.songs[j + 1], self.songs[j]
                     swapped = True
             if not swapped:
                 break
-        print("Sortiert mit Bubble Sort.")
+        #self.print_songs("Songs nach dem Sortieren:")  # Debug-Ausgabe
+        
 
     def insertion_sort(self, order, criteria):
         #Implementiert den Insertion Sort Algorithmus
+        print("insertion_sort wurde aufgerufen.")  # Debug-Ausgabe
         for i in range(1, len(self.songs)):
             key_song = self.songs[i]
             j = i - 1
@@ -710,21 +503,24 @@ class MusicApp:
                 self.songs[j + 1] = self.songs[j]
                 j -= 1
             self.songs[j + 1] = key_song
-        print("Sortiert mit Insertion Sort.")
+    
 
-    def merge_sort(self, array, order, criteria):
-        #Implementiert den Merge Sort Algorithmus
+    def merge_sort(self, order, criteria):
+        print("merge_sort wurde aufgerufen.")  # Debug-Ausgabe
+        self.songs = self._merge_sort(self.songs, order, criteria)
+        
+
+    def _merge_sort(self, array, order, criteria):
         if len(array) <= 1:
             return array
 
         mid = len(array) // 2
-        left_half = self.merge_sort(array[:mid], order, criteria)
-        right_half = self.merge_sort(array[mid:], order, criteria)
+        left_half = self._merge_sort(array[:mid], order, criteria)
+        right_half = self._merge_sort(array[mid:], order, criteria)
 
         return self.merge(left_half, right_half, order, criteria)
 
     def merge(self, left, right, order, criteria):
-        #Hilfsmethode für Merge Sort
         result = []
         i = j = 0
 
@@ -740,6 +536,7 @@ class MusicApp:
         result.extend(right[j:])
         return result
 
+
     def quick_sort(self, low, high, order, criteria):
         """
         Implementiert den Quick Sort Algorithmus.
@@ -753,6 +550,7 @@ class MusicApp:
         Returns:
             None
         """
+        #print("quick_sort wurde aufgerufen.")  #an andere Stelle verschoben, da nur einmal gezeigt werden soll
         if low < high:
             pi = self.partition(low, high, order, criteria)
             self.quick_sort(low, pi - 1, order, criteria)
@@ -782,23 +580,20 @@ class MusicApp:
         self.songs[i + 1], self.songs[high] = self.songs[high], self.songs[i + 1]
         return i + 1
 
-    def compare(self, song1, song2, order, criteria):
-        #Vergleicht zwei Songs basierend auf dem Kriterium und der Reihenfolge
+    def compare(self, song1, song2, ascending, criteria):
+        #Vergleicht zwei Song-Objekte basierend auf einem Kriterium und der Sortierreihenfolge
         if criteria == '1':  #Titel
-            if order == '1':  #Aufsteigend
-                return song1.title > song2.title
-            else:  #Absteigend
-                return song1.title < song2.title
+            comparison = song1.title > song2.title
         elif criteria == '2':  #Künstler
-            if order == '1':  #Aufsteigend
-                return song1.artist > song2.artist
-            else:  #Absteigend
-                return song1.artist < song2.artist
+            comparison = song1.artist > song2.artist
         elif criteria == '3':  #Genre
-            if order == '1':  #Aufsteigend
-                return song1.genre > song2.genre
-            else:  #Absteigend
-                return song1.genre < song2.genre
+            comparison = song1.genre > song2.genre
+        #else:
+        #    comparison = song1.title > song2.title  #Standardmäßig nach Titel sortieren, wenn das Kriterium ungültig ist
+
+        result = comparison if ascending == '1' else not comparison
+        #print(f"Vergleiche {song1.title} mit {song2.title} nach {criteria}: {result}")  # Debug-Ausgabe
+        return result
     
 
     def create_playlist(self):
@@ -871,15 +666,29 @@ class MusicApp:
         self.sorted_songs_by_artist = sorted(self.songs, key=lambda song: song.artist)
         self.sorted_songs_by_genre = sorted(self.songs, key=lambda song: song.genre)
         
+        self.save_data()
+        
         # Endzeit messen
         end_time = time.time()
         
         # Benötigte Zeit berechnen
         elapsed_time = end_time - start_time
         
-        print(f"{count} zufällige Songs erstellt, in einem Rot-SChwarz-Baum gespeichert und die Listen sortiert.")
+        # Größe des RBT berechnen
+        rbt_size = self.rbt.get_size()
+        
+        # Größe der Listen berechnen
+        lists_size = (sys.getsizeof(self.sorted_songs_by_title) +
+                      sys.getsizeof(self.sorted_songs_by_artist) +
+                      sys.getsizeof(self.sorted_songs_by_genre))
+        
+        total_size = rbt_size + lists_size
+        
+        print(f"{count} zufällige Songs erstellt, in einem Rot-Schwarz-Baum gespeichert und die Listen sortiert.")
         print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
-
+        print(f"Speicherkapazität des RBT: {rbt_size} Bytes.")
+        print(f"Speicherkapazität der Listen: {lists_size} Bytes.")
+        print(f"Gesamte Speicherkapazität: {total_size} Bytes.")
 
 
     def main_menu(self):
