@@ -193,12 +193,45 @@ Die Musik-App enthält Mechanismen zur Fehlerbehandlung und Validierung von Benu
 
 Die Musik-App misst die Ausführungszeit und den Speicherverbrauch der verschiedenen Algorithmen, um deren Effizienz zu bewerten. Die Methoden `measure_memory_and_time` und `measure_memory_and_time_sort` der `MusicApp`-Klasse werden für diese Messungen verwendet.
 
+# Leistungsanalyse des Rot-Schwarz-Baums
+
+### Einfügeoperationen
+- **Zeitkomplexität**: Die durchschnittliche und schlimmste Zeitkomplexität für das Einfügen eines Songs in den Rot-Schwarz-Baum beträgt $$O(\log n)$$, wobei $$n$$ die Anzahl der Songs im Baum ist.
+- **Speicherkomplexität**: Der Speicherverbrauch für das Einfügen eines Songs ist konstant $$O(1)$$, da nur ein neuer Knoten hinzugefügt wird.
+
+### Beispielmessungen
+- **10.000 Songs**:
+  - ![RBT 10k](Bilder/Red_Black_Tree/RBT_10000/RBT_10000_Songs.png)
+  - **Benötigte Zeit**: 0.090645 Sekunden
+  - **Speicherkapazität**: 960000 Bytes
+- **20.000 Songs**:
+  - ![RBT 20k](Bilder/Red_Black_Tree/RBT_20000/RBT_20000_Songs.png)
+  - **Benötigte Zeit**: 0.166783 Sekunden
+  - **Speicherkapazität**: 480168 Bytes
+- **1.000.000 Songs**:
+  - ![RBT 1mio](Bilder/Red_Black_Tree/RBT_1000000/RBT_1000000_Songs.png)
+  - **Benötigte Zeit**: 21.866240 Sekunden
+  - **Speicherkapazität**: 192000000 Bytes
+
+### Funktionsweise
+- **Einfügen**: Beim Einfügen eines Songs wird der Rot-Schwarz-Baum so angepasst, dass die Rot-Schwarz-Eigenschaften erhalten bleiben. Dies kann Rotationen und Farbänderungen erfordern, um die Balance des Baums zu gewährleisten.
+
+### Begründung für Laufzeit und Speicherverbrauch
+- **Laufzeit**: Die logarithmische Zeitkomplexität resultiert aus der Höhe des Baums, die im schlimmsten Fall $$O(\log n)$$ beträgt. Dies ermöglicht effiziente Einfügeoperationen auch bei großen Datenmengen.
+- **Speicherverbrauch**: Der konstante Speicherverbrauch ist auf die Tatsache zurückzuführen, dass nur ein neuer Knoten hinzugefügt wird, ohne dass zusätzliche Datenstrukturen benötigt werden.
+
+
 # Sortieralgorithmen: Laufzeit- und Speicheranalyse
 
 ## Übersicht über die Sortieralgorithmen
 
 Die folgenden Sortieralgorithmen wurden auf Listen von 10.000 und 20.000 Songs angewendet.
-
+### Beispielmessungen
+- **10.000 Songs**:
+  - ![RBT 10k_sort](Bilder/Red_Black_Tree/RBT_10000/RBT_10000_Sort.png)
+- **20.000 Songs**:
+  - ![RBT 20k_sort](Bilder/Red_Black_Tree/RBT_20000/RBT_20000_Sort.png)
+    
 ### Bubble Sort
 - **10.000 Songs**:
   - **Benötigte Zeit**: 71.401654 Sekunden
@@ -283,6 +316,10 @@ Die folgenden Sortieralgorithmen wurden auf Listen von 10.000 und 20.000 Songs a
 ## Suchalgorithmen: Laufzeit- und Speicheranalyse
 
 Die folgenden Suchalgorithmen wurden auf eine Liste von 1.000.000 Songs angewendet.
+
+### Beispielmessungen
+- **10.000 Songs**:
+  - ![RBT 1mio_search](Bilder/Red_Black_Tree/RBT_1000000/RBT_1000000_Search.png)
 
 ### Lineare Suche
 - **Benötigte Zeit**: 0.294438 Sekunden
