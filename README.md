@@ -202,16 +202,16 @@ Die Musik-App misst die Ausführungszeit und den Speicherverbrauch der verschied
 ### Beispielmessungen
 - **10.000 Songs**:
   - ![RBT 10k](Bilder/Red_Black_Tree/RBT_10000/RBT_10000_Songs.png)
-  - **Benötigte Zeit**: 0.167851 Sekunden
-  - **Speicherkapazität**: 17048 Bytes
+  - **Benötigte Zeit**: 0.090645 Sekunden
+  - **Speicherkapazität**: 960000 Bytes
 - **20.000 Songs**:
   - ![RBT 20k](Bilder/Red_Black_Tree/RBT_20000/RBT_20000_Songs.png)
-  - **Benötigte Zeit**: 0.33358 Sekunden
-  - **Speicherkapazität**: 394476 Bytes
+  - **Benötigte Zeit**: 0.166783 Sekunden
+  - **Speicherkapazität**: 480168 Bytes
 - **1.000.000 Songs**:
   - ![RBT 1mio](Bilder/Red_Black_Tree/RBT_1000000/RBT_1000000_Songs.png)
   - **Benötigte Zeit**: 21.866240 Sekunden
-  - **Speicherkapazität**: 240000168 Bytes
+  - **Speicherkapazität**: 192000000 Bytes
 
 ### Funktionsweise
 - **Einfügen**: Beim Einfügen eines Songs wird der Rot-Schwarz-Baum so angepasst, dass die Rot-Schwarz-Eigenschaften erhalten bleiben. Dies kann Rotationen und Farbänderungen erfordern, um die Balance des Baums zu gewährleisten.
