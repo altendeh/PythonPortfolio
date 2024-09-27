@@ -62,6 +62,7 @@ class MusicApp:
         #self.verify_saved_data() 
 
     def verify_saved_data(self):
+        # Funktion zum Debuggen, überprüft, wie die Songs nach dem Speichern geordnet sind
         try:
             with open(self.FILENAME, 'r') as file:
                 lines = file.readlines()
@@ -105,6 +106,16 @@ class MusicApp:
                 print(song)
 
     def measure_memory_and_time(self, method, *args):
+        """
+        Misst die Ausführungszeit und den Speicherverbrauch einer Methode.
+
+        Args:
+            method (function): Die auszuführende Methode.
+            *args: Argumente, die an die Methode übergeben werden.
+
+        Returns:
+            tuple: Ein Tuple bestehend aus dem Ergebnis der Methode, der benötigten Zeit und dem verwendeten Speicher.
+        """
         # Starten der Speicherverfolgung
         tracemalloc.start()
 
@@ -138,6 +149,16 @@ class MusicApp:
     
 
     def search_song(self):
+        """
+        Sucht nach einem Song basierend auf einem Kriterium und einer Suchmethode.
+
+        Fragt den Benutzer nach dem Suchkriterium (Titel, Künstler oder Genre) und der Suchmethode
+        (Lineare Suche, Binärsuche, Jump-Suche, Interpolationssuche, Breitensuche, Tiefensuche oder alle).
+        Führt die ausgewählte Suchmethode aus und gibt die Ergebnisse aus.
+
+        Returns:
+            None
+        """
         print("Suche nach einem Song:")
         criteria = input("Suche nach (T)itel, (K)ünstler oder (G)enre: ").strip().lower()
         if criteria == 't':
@@ -186,18 +207,7 @@ class MusicApp:
 
             print(f"Benötigte Zeit: {elapsed_time:.6f} Sekunden. Verwendete Speicherkapazität: {used_memory} Bytes.")
     
-    def measure_memory_and_time(self, search_method, *args):
-        tracemalloc.start()
-        start_time = time.time()
-    
-        # Aufruf des Suchalgorithmus
-        result = search_method(*args)
-    
-        elapsed_time = time.time() - start_time
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
-    
-        return result, elapsed_time, peak
+   
 
         
     def linear_search(self, value, criteria):
@@ -205,6 +215,7 @@ class MusicApp:
         Sucht linear nach einem Song-Objekt in der Liste basierend auf einem Kriterium.
 
         Args:
+            value (str): Der Wert des Suchkriteriums.
             criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
 
         Returns:
@@ -216,6 +227,16 @@ class MusicApp:
         return None
     
     def binary_search(self, value, criteria):
+        """
+        Sucht binär nach einem Song-Objekt in der Liste basierend auf einem Kriterium.
+
+        Args:
+            value (str): Der Wert des Suchkriteriums.
+            criteria (str): Das Suchkriterium (z.B. 'title', 'artist').
+
+        Returns:
+            Song: Der gefundene Song oder None, wenn kein Song gefunden wurde.
+        """
         if criteria == 'title':
             sorted_songs = self.sorted_songs_by_title
         elif criteria == 'artist':
@@ -350,7 +371,19 @@ class MusicApp:
                 print(f"{method_name}: '{value}' nicht in der Musikbibliothek gefunden. Benötigte Zeit: {elapsed_time:.6f} Sekunden.")
                 
     def measure_memory_and_time_sort(self, sort_method, *args):
-    
+        """
+        Misst die Ausführungszeit und den Speicherverbrauch eines Sortieralgorithmus.
+
+        Diese Funktion startet die Speicherverfolgung, misst die Speicherkapazität vor und nach der Ausführung des Sortieralgorithmus,
+        berechnet die benötigte Zeit und den verwendeten Speicher und gibt diese Werte zurück.
+
+        Args:
+            sort_method (function): Der auszuführende Sortieralgorithmus.
+            *args: Argumente, die an den Sortieralgorithmus übergeben werden.
+
+        Returns:
+            tuple: Ein Tuple bestehend aus der benötigten Zeit (in Sekunden) und dem verwendeten Speicher (in Bytes).
+        """
         tracemalloc.start()
         start_time = time.time()
 
@@ -370,6 +403,19 @@ class MusicApp:
 
 
     def sort_songs(self):
+       """
+        Misst die Ausführungszeit und den Speicherverbrauch eines Sortieralgorithmus.
+
+        Diese Funktion startet die Speicherverfolgung, misst die Speicherkapazität vor und nach der Ausführung des Sortieralgorithmus,
+        berechnet die benötigte Zeit und den verwendeten Speicher und gibt diese Werte zurück.
+
+        Args:
+            sort_method (function): Der auszuführende Sortieralgorithmus.
+            *args: Argumente, die an den Sortieralgorithmus übergeben werden.
+
+        Returns:
+            tuple: Ein Tuple bestehend aus der benötigten Zeit (in Sekunden) und dem verwendeten Speicher (in Bytes).
+        """ 
        print("Wähle Sortieralgorithmus:")
        print("1. Bubble Sort")
        print("2. Insertion Sort")
@@ -446,6 +492,15 @@ class MusicApp:
 
 
     def get_sort_order_and_criteria(self, method_name):
+        """
+        Fragt die Sortierreihenfolge und das Sortierkriterium ab.
+
+        Args:
+            method_name (str): Der Name des Sortieralgorithmus.
+
+        Returns:
+            tuple: Ein Tuple bestehend aus der Sortierreihenfolge und dem Sortierkriterium.
+        """
         print(f"Wähle Sortierreihenfolge für {method_name}:")
         print("1. Aufsteigend")
         print("2. Absteigend")
@@ -494,7 +549,16 @@ class MusicApp:
         
 
     def insertion_sort(self, order, criteria):
-        #Implementiert den Insertion Sort Algorithmus
+        """
+        Implementiert den Insertion Sort Algorithmus.
+
+        Args:
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            None
+        """
         print("insertion_sort wurde aufgerufen.")  # Debug-Ausgabe
         for i in range(1, len(self.songs)):
             key_song = self.songs[i]
@@ -506,11 +570,34 @@ class MusicApp:
     
 
     def merge_sort(self, order, criteria):
+        """
+        Implementiert den Merge Sort Algorithmus.
+
+        Args:
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            None
+        """
         print("merge_sort wurde aufgerufen.")  # Debug-Ausgabe
         self.songs = self._merge_sort(self.songs, order, criteria)
         
 
     def _merge_sort(self, array, order, criteria):
+        """
+        Implementiert den rekursiven Merge Sort Algorithmus.
+
+        Diese Funktion teilt das Array rekursiv in zwei Hälften, sortiert jede Hälfte und führt sie dann zusammen.
+
+        Args:
+            array (list): Die zu sortierende Liste von Songs.
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            list: Die sortierte Liste von Songs.
+        """
         if len(array) <= 1:
             return array
 
@@ -521,6 +608,20 @@ class MusicApp:
         return self.merge(left_half, right_half, order, criteria)
 
     def merge(self, left, right, order, criteria):
+        """
+        Führt zwei sortierte Listen zusammen.
+
+        Diese Funktion führt zwei sortierte Listen basierend auf dem angegebenen Kriterium und der Sortierreihenfolge zusammen.
+
+        Args:
+            left (list): Die linke Hälfte der sortierten Liste.
+            right (list): Die rechte Hälfte der sortierten Liste.
+            order (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+
+        Returns:
+            list: Die zusammengeführte und sortierte Liste.
+        """
         result = []
         i = j = 0
 
@@ -581,6 +682,21 @@ class MusicApp:
         return i + 1
 
     def compare(self, song1, song2, ascending, criteria):
+        """
+        Vergleicht zwei Song-Objekte basierend auf einem Kriterium und der Sortierreihenfolge.
+    
+        Diese Funktion vergleicht zwei Songs basierend auf dem angegebenen Kriterium (Titel, Künstler oder Genre)
+        und der Sortierreihenfolge (aufsteigend oder absteigend).
+    
+        Args:
+            song1 (Song): Das erste zu vergleichende Song-Objekt.
+            song2 (Song): Das zweite zu vergleichende Song-Objekt.
+            ascending (str): Die Sortierreihenfolge ('1' für aufsteigend, '2' für absteigend).
+            criteria (str): Das Sortierkriterium ('1' für Titel, '2' für Künstler, '3' für Genre).
+    
+        Returns:
+            bool: True, wenn song1 größer als song2 ist (basierend auf dem Kriterium und der Sortierreihenfolge), sonst False.
+        """
         #Vergleicht zwei Song-Objekte basierend auf einem Kriterium und der Sortierreihenfolge
         if criteria == '1':  #Titel
             comparison = song1.title > song2.title
